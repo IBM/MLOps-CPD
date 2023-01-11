@@ -1,0 +1,121 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Project to build on push to another branch</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.36.0">
+      <projectUrl>https://github.com/knijesh/MLOps_CPD/</projectUrl>
+      <displayName></displayName>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.13.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/knijesh/MLOps_CPD</url>
+        <credentialsId>ff7f77a5-02cc-4614-b675-5af87a4eb842</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="empty-list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <org.jenkinsci.plugins.gwt.GenericTrigger plugin="generic-webhook-trigger@1.85.2">
+      <spec></spec>
+      <genericVariables>
+        <org.jenkinsci.plugins.gwt.GenericVariable>
+          <expressionType>JSONPath</expressionType>
+          <key>IF_MERGED</key>
+          <value>$.pull_request.merged</value>
+          <regexpFilter></regexpFilter>
+          <defaultValue></defaultValue>
+        </org.jenkinsci.plugins.gwt.GenericVariable>
+        <org.jenkinsci.plugins.gwt.GenericVariable>
+          <expressionType>JSONPath</expressionType>
+          <key>BRANCH</key>
+          <value>$.pull_request.base.ref</value>
+          <regexpFilter></regexpFilter>
+          <defaultValue></defaultValue>
+        </org.jenkinsci.plugins.gwt.GenericVariable>
+      </genericVariables>
+      <regexpFilterText>$IF_MERGED $BRANCH</regexpFilterText>
+      <regexpFilterExpression>(?=.*true)(?=.*master).*</regexpFilterExpression>
+      <printPostContent>false</printPostContent>
+      <printContributedVariables>false</printContributedVariables>
+      <causeString>Generic Cause</causeString>
+      <token>jenkins-push</token>
+      <tokenCredentialId></tokenCredentialId>
+      <silentResponse>false</silentResponse>
+      <overrideQuietPeriod>false</overrideQuietPeriod>
+      <shouldNotFlattern>false</shouldNotFlattern>
+    </org.jenkinsci.plugins.gwt.GenericTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+
+set -e
+set +x
+
+echo &quot;Activating Virtual Env...&quot;
+source /var/jenkins_home/jenkins-env/bin/activate
+
+echo &quot;Installing dependencies&quot;
+pip install -r jenkins/cp4d-watson-api-scripts/requirements.txt
+
+echo &quot;Executing script&quot;
+python3 jenkins/cp4d-watson-api-scripts/push_jenkins_job.py --apikey your_api_key --project_id your_project_id --job_name Preprod_Job
+
+deactivate</command>
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <jenkins.plugins.slack.SlackNotifier plugin="slack@629.vf00ea_cb_40d53">
+      <baseUrl></baseUrl>
+      <teamDomain></teamDomain>
+      <authToken></authToken>
+      <tokenCredentialId></tokenCredentialId>
+      <botUser>false</botUser>
+      <room></room>
+      <sendAsText>false</sendAsText>
+      <iconEmoji></iconEmoji>
+      <username></username>
+      <startNotification>false</startNotification>
+      <notifySuccess>true</notifySuccess>
+      <notifyAborted>false</notifyAborted>
+      <notifyNotBuilt>false</notifyNotBuilt>
+      <notifyUnstable>false</notifyUnstable>
+      <notifyRegression>false</notifyRegression>
+      <notifyFailure>false</notifyFailure>
+      <notifyEveryFailure>false</notifyEveryFailure>
+      <notifyBackToNormal>false</notifyBackToNormal>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <includeTestSummary>false</includeTestSummary>
+      <includeFailedTests>false</includeFailedTests>
+      <uploadFiles>false</uploadFiles>
+      <artifactIncludes></artifactIncludes>
+      <commitInfoChoice>NONE</commitInfoChoice>
+      <includeCustomMessage>true</includeCustomMessage>
+      <customMessage></customMessage>
+      <customMessageSuccess>Preproduction pipeline up and running!</customMessageSuccess>
+      <customMessageAborted></customMessageAborted>
+      <customMessageNotBuilt></customMessageNotBuilt>
+      <customMessageUnstable></customMessageUnstable>
+      <customMessageFailure></customMessageFailure>
+    </jenkins.plugins.slack.SlackNotifier>
+  </publishers>
+  <buildWrappers/>
+</project>
