@@ -72,7 +72,7 @@
         3. Source Code Management > Git
             1. Repository URL: <YOUR_GITHUB_REPO_URL>
             2. Credentials: Select the credential you created previously
-            3. Branches to build: */main
+            3. Branches to build: */master
         4. Build Triggers
             1. Check Generic Webhook Trigger
             2. Post content parameters > Add
@@ -80,7 +80,7 @@
                 2. Name of variable: BRANCH, Expression: $.pull_request.base.ref, JSONPath
             3. Token: jenkins-push
             4. Optional Filter
-                1. Expression: (?=.*true)(?=.*master).*
+                1. Expression: (?=.*true)(?=.\*pre-prod).\*
                 2. Text: $IF_MERGED $BRANCH
 
 3. Configure GitHub Repository Webhook
@@ -88,7 +88,7 @@
     2. Enter or Select
         1. Payload URL: <YOUR_JENKINS_HOST>/generic-webhook-trigger/invoke?token=jenkins-push
         2. Content type: application/json
-        3. Which events would you like to trigger this webhook?: Let me select individual events. > Push
+        3. Which events would you like to trigger this webhook?: Let me select individual events. > Push, Pull requests
 
 4. Test
     1. Create a new branch (master)
