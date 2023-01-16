@@ -6,6 +6,7 @@ The overall architecture of the MLOps Flow is as below:
 
 ![sherry_ml_diagram_20221205_03_export_02](https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png)
 
+Demo - test
 
 ## Pre-requisite Services on IBM Cloud:
 In order to use the above asset we need to have access to have an IBM environment with authentication.
