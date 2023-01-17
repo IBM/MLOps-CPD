@@ -142,9 +142,9 @@ The procedure is a such:
     1) docker run --name jenkins -d -p 8080:8080 -p 50000:50000 --restart=on-failure -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts-jdk11
 
 4) Python, pip, and virtualenv were installed in the docker container as root (sudo is implied). The commands are as such:
-    1) apt-get install python3
-    2) apt-get install pip3
-    3) apt-get install python3-venv
+    1) yum install python3
+    2) yum install pip3
+    3) yum install python3-venv
     4) NOTE: It would be ideal to make our own Jenkins image with these preinstalled defaults in the future. Save this image to our own registry to be used downstream with minimal fuss.
 
 5) The user which executes the jenkins pipelines/scripts is the jenkins user by default. We made a targeted vritualenv for this user and dynamically installed the required dependencies on that env. This is performed by the Jenkins job (in the event the PR added a new library to the requirements.txt). This environment is used when the pipeline is triggered. Right now, we have a freestyle job. Future work includes making a Jenkinsfile pipeline out of this.
