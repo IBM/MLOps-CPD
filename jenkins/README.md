@@ -152,8 +152,15 @@ The procedure is a such:
     8) chown -R jenkins:jenkins jenkins-env/ #change owner from root to jenkins so it can be used in every build job
     
 
-5) The user which executes the jenkins pipelines/scripts is the jenkins user by default. We made a targeted vritualenv for this user and dynamically installed the required dependencies on that env. This is performed by the Jenkins job (in the event the PR added a new library to the requirements.txt). This environment is used when the pipeline is triggered. Right now, we have a freestyle job. Future work includes making a Jenkinsfile pipeline out of this.
-    1) The script can be found in the utils directory.
+5) Configure the job within Jenkins *(NOTE: The user which executes the jenkins pipelines/scripts is the jenkins user by default. We made a targeted vritualenv for this user and dynamically installed the required dependencies on that env. This is performed by the Jenkins job (in the event the PR added a new library to the requirements.txt). This environment is used when the pipeline is triggered. Right now, we have a freestyle job. Future work includes making a Jenkinsfile pipeline out of this.)*
+    1) Do all the steps under "Configuring Pull Requests to Trigger a Jenkins Job/Pipeline"
+    2) Two options to set enviroment variable
+        1)  use credential binding [here](https://plugins.jenkins.io/credentials-binding/).  
+        2)  set simple enviroment variables
+            1)go to "Manage Jenkins">"Configure System">"Enviroment variables"
+            2)add (Name:JOB; Value:Dev_Pipeline) (Name:KEY; Value:*an API Key you created within IBM Cloud*) (Name:PROJECT; Value:*The ID of your watson studio project*)
+    4) navigate to Dashboard>your_job_name>Configuration and copy paste the content of jenkins/utils/template_job.sh into Build Steps>Execute shell and save
+    5) Do a test run by clicking Dashboard>your_job_name>Build Now . You can check the output by clicking on the number of the build in the menu
 
 6) We have created secrets for the job, project and api key as required by the script. The job references said secrets. The procedure is described [here](https://plugins.jenkins.io/credentials-binding/).
     1) Here are some additional considerations when it comes to storing data in [Jenkins](https://stackoverflow.com/questions/8419385/jenkins-what-is-a-good-way-to-store-a-variable-between-two-job-runs)
