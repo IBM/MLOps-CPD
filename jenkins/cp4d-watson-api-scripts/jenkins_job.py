@@ -28,13 +28,12 @@ import click
 import requests
 from tqdm import tqdm
 
+# explanation of the JobRunner class
 
 @dataclass
 class JobRunner:
     """
     Class Encapsulating Job methods in CPD using Watson Data API.
-
-
     """
 
     api_key: str
@@ -43,6 +42,12 @@ class JobRunner:
     identity_url: str = "https://iam.cloud.ibm.com/identity/token"
 
     def create_access_token(self):
+        """
+        creates an access token for the user based on his/her API key
+
+        Returns:
+            str: the access token
+        """
         headers = {
             "Content-Type": "application/x-www-form-urlencoded",
         }
@@ -55,8 +60,15 @@ class JobRunner:
 
         return response.json()["access_token"]
 
-    def list_jobs(self):
 
+
+    def list_jobs(self) -> dict:
+        """
+        gets the list of all jobs in the project
+
+        Returns:
+            dict: json object containing the list of jobs in the project
+        """
         access_token = self.create_access_token()
         headers = {
             "authorization": f"Bearer {access_token}",
@@ -72,7 +84,16 @@ class JobRunner:
 
         return response.json()
 
-    def retrieve_job_id(self, name):
+    def retrieve_job_id(self, name: str) -> str:
+        """
+        gets the job id of the job with the given name
+
+        Args:
+            name (str): name of the job
+
+        Returns:
+            str: id of the job
+        """
         job_json = self.list_jobs()
         job_list = [
             job_json["results"][i]
@@ -84,7 +105,19 @@ class JobRunner:
         else:
             return job_list[-1]["metadata"]["asset_id"]
 
-    def run_pipeline_job(self, job_id):
+    def run_pipeline_job(self, job_id: str) -> dict:
+        """
+        starts a new run for the job with the given id 
+        https://cloud.ibm.com/apidocs/watson-data-api#job-runs-create
+        NOTE: It seems like the API has to belong to the person who created the job. This seems to differ from the behavior of the UI :-/
+
+        Args:
+            job_id (str): job id
+
+        Returns:
+            dict : full json response from the API
+        """
+        
         access_token = self.create_access_token()
         headers = {
             "accept": "application/json",
@@ -109,30 +142,25 @@ class JobRunner:
             headers=headers,
             json=json_data,
         )
-
+        
+        # raise an exception if the response is not 200
+        if response.status_code != 200:
+            raise Exception(response.text)
+        
         return response.json()
 
-    def get_status_job(self, job_id):
-        access_token = self.create_access_token()
-        headers = {
-            "accept": "application/json",
-            "Authorization": f"Bearer {access_token}",
-        }
 
-        params = {
-            "project_id": "416c3bc7-c5c2-4ec6-88fd-521714fed6bb",
-            "userfs": "false",
-        }
 
-        response = requests.get(
-            f"https://api.dataplatform.cloud.ibm.com/v2/jobs/{job_id}",
-            params=params,
-            headers=headers,
-        )
+    def get_runs_of_job(self, job_id: str) -> dict:
+        """
+        gets the list of runs for the job with the given id
 
-        return response
+        Args:
+            job_id (str): job id
 
-    def get_runs_of_job(self, job_id):
+        Returns:
+            dict: json object containing the list of runs for the job
+        """
         access_token = self.create_access_token()
         headers = {
             "accept": "application/json",
@@ -150,7 +178,15 @@ class JobRunner:
         )
         return response.json()
 
-    def get_run_ids(self, job_id):
+    def get_run_ids(self, job_id: str):
+        """_summary_
+
+        Args:
+            job_id (str): _description_
+
+        Returns:
+            _type_: _description_
+        """
         result = self.get_runs_of_job(job_id=job_id)
         run_ids = {
             each["metadata"]["asset_id"]: each["metadata"]["created_at"]
@@ -178,26 +214,21 @@ class JobRunner:
         return response.json()
 
 
-@click.command()
-@click.option(
-    "--apikey",
-    prompt="Enter your API Key",
-    required=True,
-    help="API Key of the user for running the CPD Job/WS Pipeline",
-)
-@click.option(
-    "--project_id",
-    prompt="Enter your Project ID",
-    required=True,
-    help="Project ID of the project where WS Pipeline should run",
-)
-@click.option(
-    "--job_name",
-    help="Name of the Job to be run",
-    default="Dev_Pipeline",
-    show_default=True,
-)
-def driver(apikey, project_id, job_name):
+def driver(apikey, project_id, job_name) -> bool:
+    """
+    Starts a new run for the given job name and checks if it runs successfully
+
+    Args:
+        apikey (str, optional): Key that identifies the user. NOTE: It seems like it has to be the user who created the job
+        project_id (str, optional): ID of the watson studio project
+        job_name (str, optional): the name of the job
+
+    Raises:
+        Exception: if the job run fails
+
+    Returns:
+        bool: true if the job runs successfully
+    """
     jobrun = JobRunner(apikey, project_id)
     job_id = jobrun.retrieve_job_id(name=job_name)
     print(f" Job ID is -->{job_id}")
@@ -212,6 +243,7 @@ def driver(apikey, project_id, job_name):
 
     print(f"Latest Job RUN ID is -->{latest_job_run_id}")
 
+    # check the status of the newest run if it is completed or failed
     try:
         while True:
             result = jobrun.get_runs_by_runid(job_id=job_id, run_id=latest_job_run_id)
@@ -228,7 +260,6 @@ def driver(apikey, project_id, job_name):
     print(
         f"Job {job_id} with latest run {latest_job_run_id} done with status--> {state}"
     )
-    # pprint(jobrun.get_runs_by_runid(job_id=job_id, run_id=latest_job_id))
 
     return True
 
