@@ -1,6 +1,8 @@
 # MLOps-CPD
 This repo contains an IBM's narrative of MLOps. It uses services in IBM's Cloud Pak for Data stack to actualise what an MLOps flow looks like.
 
+Note: The current implementation has been built on IBM Cloud (CPSaaS). But most of the current implementation barring few changes in authentication, should work well on Cloud Pak for Data on-prem. Based on the users' requests, we may release an on-prem version.
+
 
 The overall architecture of the MLOps Flow is as below:
 
