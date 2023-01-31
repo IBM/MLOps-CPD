@@ -1,8 +1,8 @@
 # MLOps-CPD
-This repo contains an IBM's narrative of MLOps. It uses services in IBM's Cloud Pak for Data stack to actualise what an MLOps flow looks like.
 
+This documentation describes IBM's MLOps flow implemented using services in IBM's Cloud Pak for Data stack. It therefore describes IBM's narrative of MLOps. The architecture consists of three stages: development, pre-prod, and prod. The process involves experimenting, generating source code, receiving code updates, training, deploying, and monitoring models. The demo uses the German Credit dataset to predict credit risk. The code is written in Python 3.9 and requires access to IBM Watson Studio, Watson Machine Learning, Watson Knowledge Catalog, and Watson OpenScale.
 
-The overall architecture of the MLOps Flow is as below:
+The architecture of the MLOps flow is shown below:
 
 ![sherry_ml_diagram_20221205_03_export_02](https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png)
 
