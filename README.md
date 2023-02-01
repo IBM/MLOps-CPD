@@ -54,7 +54,7 @@ In this repo we demonstrate three steps in the MLOps process:
 
 ## Python environment customisations
 
-Some of the notebooks require quite a few dependencies, which - as a best practice - should not be manually installed via pip each time. To avoid doing that, we will create custom environments. They are alternatively called `Software Configurations` across Watson Studio Documentation.
+Some of the notebooks require quite a few dependencies, which should not be manually installed via `pip` in each notebook every time. To avoid doing that, we will create custom environments. They are alternatively called `Software Configurations` across Watson Studio Documentation.
 
 ---
 <details>
