@@ -56,14 +56,20 @@ In this repo we demonstrate three steps in the MLOps process:
 
 Some of the notebooks require quite a few dependencies, which - as a best practice - should not be manually installed via pip each time. To avoid doing that, we will create custom environments. They are alternatively called `Software Configurations` across Watson Studio Documentation.
 
+---
 <details>
-<summary>⚠️ Click here if you do not know how to customize environments in Watson Studio</summary>
+<summary><b>⚠️ Click here if you do not know how to customize environments in Watson Studio</b></summary>
+
 1. Under Tool runtimes on the Environments page on the Manage tab of your project, check that no runtime is active for the environment template that you want to change. If a runtime is active, you must stop it before you can change the template.
+
 2. Under Templates on the Environments page, select the template you want to customize and add your changes. You can't change the language of an existing environment template.
+
 3. You can now create a software customization and specify the libraries to add to the standard packages that are available by default. 
 
-For more details, check out [Adding a customization](https://www.ibm.com/docs/en/cloud-paks/cp-data/4.6.x?topic=environments-adding-customization) in the Documentation
+(For more details, check out [Adding a customization](https://www.ibm.com/docs/en/cloud-paks/cp-data/4.6.x?topic=environments-adding-customization) in the Documentation)
 </details>
+
+---
 
 - Use Python 3.9 
 - Modify the `pip` part of the Python environment customisation script below: 
