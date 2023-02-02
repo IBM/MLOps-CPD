@@ -140,7 +140,7 @@ Environments used in this asset:
 
 Before you run a notebook you need to enter the value of following variables.
 
-a)The basic requirement is to get your IBM Cloud API Key (`CLOUD_API_KEY`) for all the pipelines.
+**a)** The basic requirement is to get your IBM Cloud API Key (`CLOUD_API_KEY`) for all the pipelines.
 
 ---
 <details>
@@ -162,40 +162,53 @@ a)The basic requirement is to get your IBM Cloud API Key (`CLOUD_API_KEY`) for a
 
 ---
 
-b)Secondly to get the COS Variables.These are hidden by default for obvious security reasons.
+**b)** Secondly you will need the following IBM Cloud Object Storage (COS) related variables, which will allow the notebooks to interact with your COS Instance. 
+
 The variables are:
-1. ENDPOINT_URL_MLOPS
-2. API_KEY_MLOPS
-3. CRN_MLOPS
-4. BUCKET_MLOPS
-5. AUTH_ENDPOINT
+1. `ENDPOINT_URL_MLOPS`
+2. `API_KEY_MLOPS`
+3. `CRN_MLOPS`
+4. `BUCKET_MLOPS`
+5. `AUTH_ENDPOINT`
 
-In order to get these credentials , if you are using the Test Cluster/Account you need to be added to Account number: 1500827. If you already have a cloud object storage provisioned, You need to create a Bucket.
-
-Firstly,Let's go with the default step: You have access to the COS in Account Number: 1500827.
+---
+<details>
+<summary><b>❓ Where can I find these credentials for Cloud Object Storage?</b></summary>
 
 1. Go to cloud.ibm.com and select the account from the drop down.
 2. Go to Resource list by either clicking on the left hand side button or https://cloud.ibm.com/resources.
-3. Go to Storage and select "ak-cos-poc-phoenix-ph". 
-![Screenshot 2022-11-29 at 1 19 03 PM](https://user-images.githubusercontent.com/8414621/204445270-eb9286c0-41e3-4bb9-92fc-0050e6c81661.png)
+3. Go to Storage and select the Cloud Object Storage instance that you want to use. 
+
+<img src="https://user-images.githubusercontent.com/8414621/204445270-eb9286c0-41e3-4bb9-92fc-0050e6c81661.png" width="250">
+  
 4. Select  "Service Credentials"  and Click "New Credential:
-![Screenshot 2022-11-29 at 1 49 53 PM](https://user-images.githubusercontent.com/8414621/204449450-b49f0e64-f684-4d67-b873-29de89e87759.png)
+
+<img src="https://user-images.githubusercontent.com/8414621/204449450-b49f0e64-f684-4d67-b873-29de89e87759.png" width="600">
+
+
 5. Name the credential and hit Add.
- ![Screenshot 2022-11-29 at 1 51 34 PM](https://user-images.githubusercontent.com/8414621/204449680-0b85eea4-419d-49b2-9da7-1cc814861149.png)
-6. Go to the Saved credential and click to see your credential.
-![Screenshot 2022-11-29 at 1 52 50 PM](https://user-images.githubusercontent.com/8414621/204449849-69d23454-675e-421e-8531-2cbed2235e4a.png)
-You can use these to fill the variables
+  
+<img src="https://user-images.githubusercontent.com/8414621/204449680-0b85eea4-419d-49b2-9da7-1cc814861149.png" width="600">
+  
+6. Go to the Saved credential and click to reveal your credential. You can use these values to fill the variables
+  
+<img src="https://user-images.githubusercontent.com/8414621/204449849-69d23454-675e-421e-8531-2cbed2235e4a.png" width="600">
+  
+</details>
 
-Now from the available credentails set the parameters as follows:
+---
 
-1. ENDPOINT_URL_MLOPS : or 'ENDPOINT_URL_MLOPS', go to endpoints variable and select the correct regional endpoints, an example can be :
-ENDPOINT_URL_MLOPS = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
-2. API_KEY_MLOPS = apikey
-3. CRN_MLOPS = resource_instance_id
-4. BUCKET_MLOPS = "name of the created bucket" eg "mlops-asset'
-5. AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
+You should set them at the top level of each notebook.
+Here is an example:
 
-The same is applicable for the next section.
+```python3
+ENDPOINT_URL_MLOPS = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud/" # Adjust to your correct regional endpoints (eu-de etc.)
+API_KEY_MLOPS = apikey
+CRN_MLOPS = resource_instance_id
+BUCKET_MLOPS = "" # Name of the Bucket
+AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
+
+```
 
 Now if you want to use your own COS.
 ------------------------------------
