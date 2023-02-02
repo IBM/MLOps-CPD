@@ -8,9 +8,9 @@ The architecture of the MLOps flow is shown below:
 
 ![sherry_ml_diagram_20221205_03_export_02](https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png)
 
-Demo - test
+## Overview
 
-## Pre-requisite Services on IBM Cloud:
+### Prerequisites on IBM Cloud:
 In order to use the above asset we need to have access to have an IBM environment with authentication.
 IBM Cloud Account with following services:
   1. IBM Watson Studio
@@ -38,21 +38,35 @@ For OpenScale, we have ml providers:
   1. MLOps_Preprod : To Subscribe to all the models in dev and pre-prod environments.
   2. MLOps_Prod : To Subscribe to all models in the prod environment.
 
-## Branch management
+### Branch management
 This repo has two branches, `master` and `pre-prod`. The `master` branch is served as the dev branch, and receives direct commits from the linked `CP4D` prject. When a pull request is created to merge the changes into the pre-prod branch, Jenkins will automatically start the CI tests. 
 
-## Dataset and data science problem
+### Dataset and data science problem
 In this example we use the German Credit dataset and aim to predict credit risk. The dataset can be downloaded from [here](https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv).
 
-## Process overview
+### Process overview
 In this repo we demonstrate three steps in the MLOps process:
 
 1. Development: orchestrated experiments and generate source code for pipelines
 2. Pre-prod: receives code updates from dev stage and contain CI tests to make sure the new code/model integrates well, trains, deploys and monitors the model in the pre-prod deployment space to validate the model. The validated model can be deployed to prod once approved by the model validator.
 3. Prod: deploys the model in the prod environment and monitors it, triggers retraining jobs (eg. restart pre-prod pipeline or offline modeling)
 
+# Setup
 
-## Python environment customisations
+## Creating a project in Watson Studio
+
+You create a project to work with data and other resources to achieve a particular goal, such as building a model or integrating data.
+
+⚠️ We plan on offering this asset as a fully pre-built project space demo within the "Create a project from a sample or file" Option. For now, you will have to construct it manually.
+
+1. Click New project on the home page or on your Projects page.
+2. Create an empty project.
+3. On the New project screen, add a name. Make it short but descriptive.
+4. If appropriate, mark the project as sensitive. The project has a sensitive tag and project collaborators can't move data assets out of the project. You cannot change this setting after the project is created.
+5. Choose an existing object storage service instance or create a new one.
+Click Create. You can start adding resources to your project.
+
+### Python environment customisations
 
 Some of the notebooks require quite a few dependencies, which should not be manually installed via `pip` in each notebook every time. To avoid doing that, we will create custom environments. They are alternatively called `Software Configurations` across Watson Studio Documentation.
 
@@ -122,20 +136,31 @@ Environments used in this asset:
     - ibm-aigov-facts-client
 ```
 
-## Pre-requisite before running a notebook or pipeline:
+### Pre-requisite before running a notebook or pipeline:
 
 Before you run a notebook you need to enter the value of following variables.
 
-a)The basic requirement is to get your CLOUD API KEY for all the pipelines.
+a)The basic requirement is to get your IBM Cloud API Key (`CLOUD_API_KEY`) for all the pipelines.
 
-1. You can go to https://cloud.ibm.com
-2. ![Screenshot 2022-11-29 at 1 55 12 PM](https://user-images.githubusercontent.com/8414621/204450079-c3c315a2-cd37-427d-9188-9eb4518ed37e.png)
-Select Manage -> Access(IAM).
-3. ![Screenshot 2022-11-29 at 1 56 18 PM](https://user-images.githubusercontent.com/8414621/204450245-3b759195-78ae-4542-bf8f-10553f417706.png)
-Click on the API keys and create new API Key.
+---
+<details>
+<summary><b>❓ Where can I create/generate an API Key?</b></summary>
+
+1. Navigate to https://cloud.ibm.com
+
+2. (On the top right) Select Manage > Access(IAM).
+
+<img src="https://user-images.githubusercontent.com/8414621/204450079-c3c315a2-cd37-427d-9188-9eb4518ed37e.png" width="250">
+
+3. Click on the API keys and create new API Key.
+
+<img src="https://user-images.githubusercontent.com/8414621/204450245-3b759195-78ae-4542-bf8f-10553f417706.png" width="700">
+
 4. Name the API Key and Copy or Download it.
 
-Your API KEY is ready for use for execution.
+</details>
+
+---
 
 b)Secondly to get the COS Variables.These are hidden by default for obvious security reasons.
 The variables are:
@@ -200,7 +225,7 @@ For now, it has been duly documented in the notebooks as you see in the image be
 
 
 
-### How to create a WS Pipeline in CP4D
+#### How to create a WS Pipeline in CP4D
 
 In your CP4D project, click the blue button `New Asset +`. Then find `Pipelines`
 
@@ -228,7 +253,7 @@ To save a version of the notebook, go to the notebook editor model in your CP4D 
 ![Screenshot 2022-11-28 at 8 21 54 pm](https://user-images.githubusercontent.com/77606025/204240804-4996134c-c7db-4dd8-ad9f-84d876cff91d.png)
 
 
-### To check the log and debug a pipeline
+#### To check the log and debug a pipeline
 
 When the pipeline is running, double click on the node that is currently running to open Node Inspector, as shown in the below image. The log will contain all the notebook run status, the prints and errors where the notebook fails.
 
