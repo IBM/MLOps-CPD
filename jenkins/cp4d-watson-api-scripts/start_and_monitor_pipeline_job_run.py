@@ -1,19 +1,10 @@
 """    
-__author__ == "Nijesh"
-
-email : knijesh@sg.ibm.com
-
- Jenkins PR Script Job Runner Client
-
- The Script is used to test a dev orchestrated pipeline before accepting a pull request
-
-INVOCATION FORMAT:
+This script is used to run a watson studio pipeline job using the Watson Data API. 
+https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-orchestration-overview.html
+TODO: use ibm-watson-pipelines python package instead of the API
+https://pypi.org/project/ibm-watson-pipelines/
 
 python pr_jenkins_job.py --apikey APIKEY -w --project_id PROJECT_ID --job_name NAME
-
-Job Name is Optional.
-
-All the tests in Watson Studio especially on CPDSaaS has to be run via jobs.. This is the template to be followed.
 
 """
 
@@ -100,10 +91,13 @@ class JobRunner:
             for i, job in enumerate(job_json["results"])
             if job_json["results"][i]["metadata"]["name"] == name
         ]
-        if len(job_list) == 1:
-            return job_list[0]["metadata"]["asset_id"]
-        else:
-            return job_list[-1]["metadata"]["asset_id"]
+        try: 
+            if len(job_list) == 1:
+                return job_list[0]["metadata"]["asset_id"]
+            else:
+                return job_list[-1]["metadata"]["asset_id"]
+        except IndexError:
+            raise Exception("No job with the given name "+name+" found")
 
     def run_pipeline_job(self, job_id: str) -> dict:
         """
@@ -143,9 +137,9 @@ class JobRunner:
             json=json_data,
         )
         
-        # raise an exception if the response is not 200
-        if response.status_code != 200:
-            raise Exception(response.text)
+        # raise an exception if the response is not 200 or 201
+        if response.status_code not in [200, 201]:
+            raise Exception(f"Error: {response.status_code} {response.text}")
         
         return response.json()
 
@@ -214,14 +208,35 @@ class JobRunner:
         return response.json()
 
 
-def driver(apikey, project_id, job_name) -> bool:
+# this is needed to run the script from a terminal 
+@click.command()
+@click.option(
+    "--apikey",
+    prompt="Enter your API Key",
+    required=True,
+    help="API Key of the user for running the CPD Job/WS Pipeline",
+)
+@click.option(
+    "--project_id",
+    prompt="Enter your Project ID",
+    required=True,
+    help="Project ID of the project where WS Pipeline should run",
+)
+@click.option(
+    "--job_name",
+    help="Name of the Job to be run",
+    default="Dev_Pipeline",
+    show_default=True,
+)
+
+def driver(apikey, project_id, job_name):
     """
     Starts a new run for the given job name and checks if it runs successfully
 
     Args:
-        apikey (str, optional): Key that identifies the user. NOTE: It seems like it has to be the user who created the job
-        project_id (str, optional): ID of the watson studio project
-        job_name (str, optional): the name of the job
+        apikey (str): Key that identifies the user. NOTE: It seems like it has to be the user who created the job
+        project_id (str): ID of the watson studio project
+        job_name (str): the name of the job
 
     Raises:
         Exception: if the job run fails

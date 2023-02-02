@@ -16,6 +16,6 @@ pip install -r jenkins/cp4d-watson-api-scripts/requirements.txt
 
 # TODO: Wrap this in a try catch and deactivate on failure. Right now this deactivates only on success but we want to do it in failure events too.
 echo "Executing script"
-python3 jenkins/cp4d-watson-api-scripts/pr_jenkins_job.py --apikey $KEY --project_id $PROJECT --job_name $JOB
+python3 jenkins/cp4d-watson-api-scripts/start_and_monitor_pipeline_job_run.py --apikey $KEY --project_id $PROJECT --job_name $JOB
 
 deactivate
