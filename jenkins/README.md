@@ -1,5 +1,10 @@
-# Setting up Jenkins
+# Jenkins
+
+## Overview
 ![Alt text](images/overview.png)
+
+## Setting up Jenkins
+
 We had to deploy a remote Jenkins instance. By default, pods running in OpenShift are configured under the default security context which means ssh’ing as an Administrator to perform adminstrative functions is out of the question. As such, we have spun up a virtual server on IBM Cloud and ran Jenkins as a docker image within it.
 
 The procedure is a such:

@@ -1,11 +1,10 @@
 """    
 This script is used to run a watson studio pipeline job using the Watson Data API. 
 https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-orchestration-overview.html
-TODO: use ibm-watson-pipelines python package instead of the API
+TODO: use ibm-watson-pipelines python package instead of the API --> more reliable and convenient
 https://pypi.org/project/ibm-watson-pipelines/
 
-python pr_jenkins_job.py --apikey APIKEY -w --project_id PROJECT_ID --job_name NAME
-
+python start_and_monitor_pipeline_job_run.py.py --apikey APIKEY -w --project_id PROJECT_ID --job_name NAME
 """
 
 import json
