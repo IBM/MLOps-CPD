@@ -20,19 +20,13 @@ IBM Cloud Account with following services:
 
 Please ascertain you have appropriate access in all the services.
   
-  The runs are also governed by the amount of CUH you have access to. 
+  The runs are also governed by the amount of capacity unit hours (CUH) you have access to. 
   If you are running on the free plan please refer to the following links:
   
   1. https://cloud.ibm.com/catalog/services/watson-studio
   2. https://cloud.ibm.com/catalog/services/watson-machine-learning
   3. https://cloud.ibm.com/catalog/services/watson-openscale
   4. https://cloud.ibm.com/catalog/services/watson-knowledge-catalog
-
-For IBM WML, We have three spaces:
-  1. MLOps_Dev : Dev Space to deploy your models and test before being pushed to the pre-prod
-  2. MLOps_preprod : Pre-prod Space to deploy and test and validate your models. The Validator uses this environment before giving a go ahead to                                push the models in production.
-  3. MLOps_Prod : Production Space to deploy your validated models and monitor it.
-
 
 For OpenScale, we have ml providers:
   1. MLOps_Preprod : To Subscribe to all the models in dev and pre-prod environments.
@@ -51,9 +45,9 @@ In this repo we demonstrate three steps in the MLOps process:
 2. Pre-prod: receives code updates from dev stage and contain CI tests to make sure the new code/model integrates well, trains, deploys and monitors the model in the pre-prod deployment space to validate the model. The validated model can be deployed to prod once approved by the model validator.
 3. Prod: deploys the model in the prod environment and monitors it, triggers retraining jobs (eg. restart pre-prod pipeline or offline modeling)
 
-# Setup
+# 1. Setup
 
-## Creating a project in Watson Studio
+## 1.1. Creating a project in Watson Studio
 
 You create a project to work with data and other resources to achieve a particular goal, such as building a model or integrating data.
 
@@ -65,6 +59,13 @@ You create a project to work with data and other resources to achieve a particul
 4. If appropriate, mark the project as sensitive. The project has a sensitive tag and project collaborators can't move data assets out of the project. You cannot change this setting after the project is created.
 5. Choose an existing object storage service instance or create a new one.
 Click Create. You can start adding resources to your project.
+
+## 1.2. Creating the deployment spaces
+
+For IBM WML, We have three spaces:
+  1. MLOps_Dev : Dev Space to deploy your models and test before being pushed to the pre-prod
+  2. MLOps_preprod : Pre-prod Space to deploy and test and validate your models. The Validator uses this environment before giving a go ahead to                                push the models in production.
+  3. MLOps_Prod : Production Space to deploy your validated models and monitor it.
 
 ### Python environment customisations
 
