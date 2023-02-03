@@ -10,6 +10,10 @@ The architecture of the MLOps flow is shown below:
 
 ## Overview
 
+### Important consideration: CPDaaS vs. On-Prem
+When this asset was created from scratch, it was laid out for our CPDaaS solution. However, there are slight but - at least here - significant differences between the two including - but not limited to - the absence of a file system and a less refined Git integration in CPDaaS.
+We are currently weighing the pros and cons of two approaches: Highlighting points of this documentation where CPDaaS is limited (including a work-around), or offering a separate repository.
+
 ### Prerequisites on IBM Cloud:
 In order to use the above asset we need to have access to have an IBM environment with authentication.
 IBM Cloud Account with following services:
@@ -56,9 +60,11 @@ You create a project to work with data and other resources to achieve a particul
 1. Click New project on the home page or on your Projects page.
 2. Create an empty project.
 3. On the New project screen, add a name. Make it short but descriptive.
-4. If appropriate, mark the project as sensitive. The project has a sensitive tag and project collaborators can't move data assets out of the project. You cannot change this setting after the project is created.
+4. If appropriate for your use case, mark the project as sensitive. The project has a sensitive tag and project collaborators can't move data assets out of the project. You cannot change this setting after the project is created.
 5. Choose an existing object storage service instance or create a new one.
 Click Create. You can start adding resources to your project.
+
+Along with the creation of a project, a bucket in your object storage instance will be created. This bucket will look like `[PROJECT_NAME]-donotdelete...`. 
 
 ## 1.2. Creating the deployment spaces
 
@@ -208,7 +214,6 @@ API_KEY_MLOPS = apikey
 CRN_MLOPS = resource_instance_id
 BUCKET_MLOPS = "" # Name of the Bucket
 AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
-
 ```
 
 Now if you want to use your own COS.
@@ -235,7 +240,7 @@ As the asset was developed in CPDSaaS, the only efficient way to include the uti
 In the below notebook you can see the accesstoken embeddded : You may need to change that in case of any import errors. You are encouraged to use your personal access token from github.
 For now, it has been duly documented in the notebooks as you see in the image below.
 
-![Screenshot 2022-12-06 at 1 54 04 PM](https://user-images.githubusercontent.com/8414621/205830002-73375a89-787e-4c1f-814f-f9accd3e566b.png)
+<img width="1000" alt="Screenshot 2022-12-06 at 1 54 04 PM" src="https://user-images.githubusercontent.com/8414621/205830002-73375a89-787e-4c1f-814f-f9accd3e566b.png">
 
 
 
@@ -243,13 +248,13 @@ For now, it has been duly documented in the notebooks as you see in the image be
 
 In your CP4D project, click the blue button `New Asset +`. Then find `Pipelines`
 
-<img width="1657" alt="Screenshot 2022-11-25 at 2 05 04 pm" src="https://user-images.githubusercontent.com/77606025/203892669-27589779-ad9f-458b-a0fc-7d6fca728459.png">
+<img width="1000" alt="Screenshot 2022-11-25 at 2 05 04 pm" src="https://user-images.githubusercontent.com/77606025/203892669-27589779-ad9f-458b-a0fc-7d6fca728459.png">
 
 Select Pipelines and give the pipeline a name. 
 
 Once the pipeline is created, you will see the pipeline edit menu and the palette on the left.
 
-<img width="513" alt="Screenshot 2022-11-25 at 2 10 16 pm" src="https://user-images.githubusercontent.com/77606025/203892823-e1500928-acc4-4c9f-8165-8c658ae5b5ce.png">
+<img width="500" alt="Screenshot 2022-11-25 at 2 10 16 pm" src="https://user-images.githubusercontent.com/77606025/203892823-e1500928-acc4-4c9f-8165-8c658ae5b5ce.png">
 
 Expand the `Run` section and drag and drop the `Run notebook` block. 
 
