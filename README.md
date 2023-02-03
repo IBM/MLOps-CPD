@@ -5,8 +5,48 @@ This documentation describes IBM's MLOps flow implemented using services in IBM'
 Note: The current implementation has been built on IBM Cloud (CPSaaS). But most of the current implementation barring few changes in authentication, should work well on Cloud Pak for Data on-prem. Based on the users' requests, we may release an on-prem version.
 
 The architecture of the MLOps flow is shown below:
+<img src="https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png" width="750">
 
-![sherry_ml_diagram_20221205_03_export_02](https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png)
+  * [Overview](#overview)
+    + [Important consideration: CPDaaS vs. On-Prem](#important-consideration--cpdaas-vs-on-prem)
+    + [Prerequisites on IBM Cloud:](#prerequisites-on-ibm-cloud-)
+    + [Branch management](#branch-management)
+    + [Dataset and data science problem](#dataset-and-data-science-problem)
+    + [Process overview](#process-overview)
+- [1. Setup](#1-setup)
+  * [1.1. Creating a project in Watson Studio](#11-creating-a-project-in-watson-studio)
+  * [1.2. Creating the deployment spaces](#12-creating-the-deployment-spaces)
+    + [Python environment customisations](#python-environment-customisations)
+    + [Pre-requisite before running a notebook or pipeline:](#pre-requisite-before-running-a-notebook-or-pipeline-)
+  * [Now if you want to use your own COS.](#now-if-you-want-to-use-your-own-cos)
+  * [Github Access Token in Notebooks](#github-access-token-in-notebooks)
+      - [How to create a WS Pipeline in CP4D](#how-to-create-a-ws-pipeline-in-cp4d)
+      - [NOTE: you will need to save a Jupyter notebook version for WS Pipeline to work](#note--you-will-need-to-save-a-jupyter-notebook-version-for-ws-pipeline-to-work)
+      - [To check the log and debug a pipeline](#to-check-the-log-and-debug-a-pipeline)
+- [1. Development](#1-development)
+  * [Offline modeling](#offline-modeling)
+    + [Notebook 1: Connect and validate data](#notebook-1--connect-and-validate-data)
+    + [Notebook 2: Data preparation](#notebook-2--data-preparation)
+    + [Notebook 3: Model training and evaluation](#notebook-3--model-training-and-evaluation)
+    + [Notebook 4: Model deployment](#notebook-4--model-deployment)
+- [2. Pre-prod](#2-pre-prod)
+  * [Continuous integration](#continuous-integration)
+    + [CI tests](#ci-tests)
+  * [Recommended CI tests](#recommended-ci-tests)
+  * [Continuous delivery - pipeline](#continuous-delivery---pipeline)
+    + [Data Extraction and Data Validation](#data-extraction-and-data-validation)
+    + [Data preparation](#data-preparation)
+    + [Model Training and Model Evaluation](#model-training-and-model-evaluation)
+    + [Model Deployment (pre-prod space)](#model-deployment--pre-prod-space-)
+    + [Model Monitoring and Model Validation](#model-monitoring-and-model-validation)
+    + [Notebook 5: Model monitoring](#notebook-5--model-monitoring)
+- [3. Prod](#3-prod)
+    + [Deployment Checks](#deployment-checks)
+    + [Model deployment (prod space)](#model-deployment--prod-space-)
+    + [Model monitoring](#model-monitoring)
+    + [Model retraining](#model-retraining)
+  * [AI Factsheets](#ai-factsheets)
+
 
 ## Overview
 
