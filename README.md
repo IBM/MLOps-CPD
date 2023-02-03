@@ -1,11 +1,16 @@
-# MLOps-CPD
+# Machine Learning Operations in CloudPak for Data (MLOps-CPD)
 
 This documentation describes IBM's MLOps flow implemented using services in IBM's Cloud Pak for Data stack. It therefore describes IBM's narrative of MLOps. The architecture consists of three stages: development, pre-prod, and prod. The process includes: receiving code updates, training, deploying, and monitoring models. The demo uses the German Credit dataset to predict credit risk. The code is written in Python 3.9 and requires access to IBM Watson Studio, Watson Machine Learning, Watson Knowledge Catalog, and Watson OpenScale.
 
 Note: The current implementation has been built on IBM Cloud (CPSaaS). But most of the current implementation barring few changes in authentication, should work well on Cloud Pak for Data on-prem. Based on the users' requests, we may release an on-prem version.
 
-The architecture of the MLOps flow is shown below:
-<img src="https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png" width="750">
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png" width="750">
+</p>
+
+<p align="center">
+  <em>Fig. 1.: Architecture of the MLOps flow</em>
+</p>
 
   * [Overview](#overview)
     + [Important consideration: CPDaaS vs. On-Prem](#important-consideration--cpdaas-vs-on-prem)
@@ -260,16 +265,19 @@ Now if you want to use your own COS.
 ------------------------------------
 1. Navigate to your COS as explain in Step 3 above.
 2. Click on buckets. Create a bucket.
- ![Screenshot 2022-11-29 at 1 59 27 PM](https://user-images.githubusercontent.com/8414621/204450694-560792bc-ea54-437c-82c8-f623373a61f8.png)
-3. Click "Customise Bucket".
-![Screenshot 2022-11-29 at 2 00 11 PM](https://user-images.githubusercontent.com/8414621/204450827-70b032ce-a9b6-436a-963c-802d737009ca.png)
-4. Name the Bucket
-![Screenshot 2022-11-29 at 2 01 02 PM](https://user-images.githubusercontent.com/8414621/204451007-39aeb731-6933-41d3-8c42-6dd227eb08c3.png)
-5. Click create.
-![Screenshot 2022-11-29 at 2 01 12 PM](https://user-images.githubusercontent.com/8414621/204451022-c5f33efe-5282-4066-85b0-288b0d59057b.png)
+<img width="1000" src="https://user-images.githubusercontent.com/8414621/204450694-560792bc-ea54-437c-82c8-f623373a61f8.png">
 
-6. Download the data from : https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv
-and place it in the bucket. 
+
+3. Click "Customise Bucket".
+<img width="1000" src="https://user-images.githubusercontent.com/8414621/204450827-70b032ce-a9b6-436a-963c-802d737009ca.png">
+
+4. Name the Bucket
+<img width="1000" src="https://user-images.githubusercontent.com/8414621/204451007-39aeb731-6933-41d3-8c42-6dd227eb08c3.png">
+
+5. Click create.
+<img width="1000" src="https://user-images.githubusercontent.com/8414621/204451022-c5f33efe-5282-4066-85b0-288b0d59057b.png">
+
+6. Download the dataset ([german_credit_data_biased_training.csv](https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv)) and place it in the bucket. 
 
 
 Now you are ready to start!!!!
