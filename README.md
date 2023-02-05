@@ -110,7 +110,7 @@ You create a project to work with data and other resources to achieve a particul
 Click Create. You can start adding resources to your project.
 
 Along with the creation of a project, a bucket in your object storage instance will be created. This bucket will look like `[PROJECT_NAME]-donotdelete...`. 
-You can use this bucket for the whole asset, but we recommend creating a separate bucket in which we will store the dataset, train/test split et cetera.
+You can use this bucket through out this project, however we recommend creating a separate bucket in which we will store the dataset, train/test split et cetera.
 
 ---
 <details>
@@ -149,6 +149,10 @@ For IBM WML, We have three spaces:
   1. MLOps_Dev : Dev Space to deploy your models and test before being pushed to the pre-prod
   2. MLOps_preprod : Pre-prod Space to deploy and test and validate your models. The Validator uses this environment before giving a go ahead to                                push the models in production.
   3. MLOps_Prod : Production Space to deploy your validated models and monitor it.
+
+## 1.3. Preparing the Notebooks
+
+In this section, we will first setup the custom Python environments, collect necessary credentials, upload the notebooks, and modify them.
 
 ### Python environment customisations
 
@@ -203,8 +207,6 @@ Environments used in this asset:
     - ibm_watson_studio_pipelines
 ```
 
-
-
 `pipeline_custom` environment
 ```
   - pip:
@@ -220,9 +222,9 @@ Environments used in this asset:
     - ibm-aigov-facts-client
 ```
 
-### Pre-requisite before running a notebook or pipeline:
+### Retrieving required credentials (IBM Cloud API key and COS credentials)
 
-Before you run a notebook you need to enter the value of following variables.
+Before you run a notebook you need to obtain the following credentials and add the COS credentials to the beginning of each notebook. The Cloud API key must not be added to the notebooks since it is passed through the pipeline later.
 
 **a)** The basic requirement is to get your IBM Cloud API Key (`CLOUD_API_KEY`) for all the pipelines.
 
@@ -292,29 +294,6 @@ CRN_MLOPS = resource_instance_id
 BUCKET_MLOPS = "" # Name of the Bucket
 AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
 ```
-
-Now if you want to use your own COS.
-------------------------------------
-1. Navigate to your COS as explain in Step 3 above.
-2. Click on buckets. Create a bucket.
-
-<img width="1000" src="https://user-images.githubusercontent.com/8414621/204450694-560792bc-ea54-437c-82c8-f623373a61f8.png">
-
-
-3. Click "Customise Bucket".
-
-<img width="1000" src="https://user-images.githubusercontent.com/8414621/204450827-70b032ce-a9b6-436a-963c-802d737009ca.png">
-
-4. Name the Bucket
-
-<img width="1000" src="https://user-images.githubusercontent.com/8414621/204451007-39aeb731-6933-41d3-8c42-6dd227eb08c3.png">
-
-5. Click create.
-<img width="1000" s
-rc="https://user-images.githubusercontent.com/8414621/204451022-c5f33efe-5282-4066-85b0-288b0d59057b.png">
-
-6. Download the dataset ([german_credit_data_biased_training.csv](https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv)) and place it in the bucket. 
-
 
 Now you are ready to start!
 
