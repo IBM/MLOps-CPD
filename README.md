@@ -30,7 +30,7 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
       - [To check the log and debug a pipeline](#to-check-the-log-and-debug-a-pipeline)
 - [2. Pipeline Setup](#2-pipeline-setup)
   * [2.1. Development](#21-development)
-  * [Offline modeling](#offline-modeling)
+    + [Offline modeling](#offline-modeling)
     + [Notebook 1: Connect and validate data](#notebook-1--connect-and-validate-data)
     + [Notebook 2: Data preparation](#notebook-2--data-preparation)
     + [Notebook 3: Model training and evaluation](#notebook-3--model-training-and-evaluation)
@@ -51,8 +51,7 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
     + [Model deployment (prod space)](#model-deployment--prod-space-)
     + [Model monitoring](#model-monitoring)
     + [Model retraining](#model-retraining)
-  * [AI Factsheets](#ai-factsheets)
-
+  * [2.4. AI Factsheets](#24-ai-factsheets)
 
 ## Overview
 
@@ -348,7 +347,7 @@ When the pipeline is running, double click on the node that is currently running
 
 ## 2.1. Development
 
-## Offline modeling
+### Offline modeling
 Offline modeling includes the usually data exploration and data science experiments. In this step, you can try different data manipulation, feature engineering and machine learning models. 
 
 The output of this stage is code assets, for example Python scripts or Jupyter notebooks that can be used as blocks in the pipelines.
@@ -443,9 +442,6 @@ The source code is stored in the [jenkins](jenkins) directory and the documentat
   - Test output scheme is as expected 
   - Test output errors are handled correctly 
  
-
-
-
 
 ### Continuous delivery - pipeline
 
@@ -669,7 +665,7 @@ In OpenScale, the flow of the retraining looks like:
 - Openscale model monitoring alerts are triggered, and an email is received: manually trigger the retrain job to update the data and restart the pre-prod pipeline
 - Openscale model monitoring alerts are triggered, and an email is received: after some investigation, you decide that you want to try different models or features, therefore restart from the offline modeling stage. 
 
-## AI Factsheets
+## 2.4. AI Factsheets
 
 In this project we also demonstrate how we put the model into the a model registry and track the model with [AI Factsheets](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/factsheets-model-inventory.html)
 
