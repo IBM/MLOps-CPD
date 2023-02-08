@@ -343,9 +343,9 @@ When the pipeline is running, double click on the node that is currently running
 ![Screenshot 2022-11-28 at 7 45 43 pm](https://user-images.githubusercontent.com/77606025/204234082-95c90b64-a380-4450-887d-a231527ffed7.png)
 
 
+# 2. Pipeline Setup
 
-
-# 1. Development
+## 2.1. Development
 
 ## Offline modeling
 Offline modeling includes the usually data exploration and data science experiments. In this step, you can try different data manipulation, feature engineering and machine learning models. 
@@ -412,9 +412,9 @@ This notebook source code can be found in [deploy_model.ipynb](deploy_model.ipyn
 By changing the input to this notebook, the model can be deployed to dev, pre-prod and prod spaces. 
 
 
-# 2. Pre-prod 
+## 2.2. Pre-prod 
 
-## Continuous integration 
+### Continuous integration 
 
 When the Jupyter notebooks have a change commited and a pull request is made, Jenkins will start the CI tests.
 
@@ -425,7 +425,7 @@ The source code is stored in the [jenkins](jenkins) directory and the documentat
 - Pipeline component integration test: run the pipeline in dev environment to check if it successfully runs
 - Model Convergence test: check the training loss to see if it keeps declining
 
-## Recommended CI tests
+### Recommended CI tests
 - Behaviour Tests 
   - Invariance 
   - Directionality
@@ -446,7 +446,7 @@ The source code is stored in the [jenkins](jenkins) directory and the documentat
 
 
 
-## Continuous delivery - pipeline
+### Continuous delivery - pipeline
 
 After the CI tests passed, the admin/data science lead will merge the changes and Jenkins will trigger the following `pre-prod` pipeline:
 
@@ -626,7 +626,7 @@ None
 
 Once the model is validated, and approved by the model validator, the model can be deployed to the prod environment.
 
-# 3. Prod 
+## 2.3. Prod 
 
 In this example we reuse the [deploy_model.ipynb](deploy_model.ipynb) and [monitor_models.ipynb](monitor_models.ipynb) to create the deployment job.
 
