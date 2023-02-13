@@ -1,16 +1,44 @@
 # Jenkins
 
-## Contributors
+## Overview
+![Alt text](images/overview.png)
 
-1) Eddy Kim
-    1) Responsible for the following sections:
-        1) Configuring Pull Requests to Trigger a Jenkins Job/Pipeline
-        2) Configuring Merge Requests (Git pushes) to Trigger a Jenkins Job/Pipeline
+## Setting up Jenkins
 
-2) Marwan Attar
-    1) Responsible for the following sections:
-        1) Configuring Jenkins Job to Send Slack Notifications
-        2) Remote Jenkins
+We had to deploy a remote Jenkins instance. By default, pods running in OpenShift are configured under the default security context which means ssh’ing as an Administrator to perform adminstrative functions is out of the question. As such, we have spun up a virtual server on IBM Cloud and ran Jenkins as a docker image within it.
+
+The procedure is a such:
+
+1) Deploy a Centos 7.9 VSI on BM Cloud. Any server will do, so as long as Docker can be downloaded and installed.
+
+2) Installed Docker on the VM. Steps given [here](https://docs.genesys.com/Documentation/System/latest/DDG/InstallationofDockerEngineCommunityEditiononCentOS7).
+    1) Note: It would be ideal to make an image out of this server to be used in the future. This way, we don’t need to install Docker all the time.
+    2) Note: Depending on the OS of the server you deployed, the steps required to install and run docker will likely be different. Consult the relevant documentation in such case.
+
+3) Run docker command to run Jenkins. The command is as such:
+    1) docker run --name jenkins -d -p 8080:8080 -p 50000:50000 --restart=on-failure -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts-jdk11
+
+4) Execute into the running jenkins container as root to install the python enviroment needed to execute the actual jenkins job later. *(NOTE: It would be ideal to make our own Jenkins image with these preinstalled defaults in the future. Save this image to our own registry to be used downstream with minimal fuss.)*
+    1) docker exec -u 0 -it jenkins /bin/bash #start an interactive shell in the container as root
+    2) apt-get update
+    3) apt-get install python3
+    4) apt-get install python3-pip
+    5) apt-get install python3-venv
+    6) cd var/jenkins_home/ #location where the build job expects the virtual enviroment
+    7) python3 -m venv jenkins-env #setup virtual enviroment
+    8) chown -R jenkins:jenkins jenkins-env/ #change owner from root to jenkins so it can be used in every build job
+    
+
+5) Configure the job within Jenkins *(NOTE: The user which executes the jenkins pipelines/scripts is the jenkins user by default. We made a targeted vritualenv for this user and dynamically installed the required dependencies on that env. This is performed by the Jenkins job (in the event the PR added a new library to the requirements.txt). This environment is used when the pipeline is triggered. Right now, we have a freestyle job. Future work includes making a Jenkinsfile pipeline out of this.)*
+    1) Do all the steps under "Configuring Pull Requests to Trigger a Jenkins Job/Pipeline"
+    2) set enviroment variables. There are two options: 
+        1)  use credential binding (secure) [here](https://plugins.jenkins.io/credentials-binding/).  
+        2)  set simple enviroment variables (easy)
+            1)go to "Manage Jenkins">"Configure System">"Enviroment variables"
+            2)add (Name:JOB; Value:Dev_Pipeline) (Name:KEY; Value:*an API Key you created within IBM Cloud*) (Name:PROJECT; Value:*The ID of your watson studio project*)
+    4) navigate to Dashboard>your_job_name>Configuration and copy paste the content of jenkins/utils/template_job.sh into Build Steps>Execute shell and save
+    5) Do a test run by clicking Dashboard>your_job_name>Build Now . You can check the output by clicking on the number of the build in the menu
+
 
 ## Configuring Pull Requests to Trigger a Jenkins Job/Pipeline
 1. Install GitHub Pull Request Builder plugin
@@ -126,29 +154,3 @@ Click on the channel. Navigate to the top of the screen where the channel name i
 
 The channel ID can be seen towards the bottom of the screen above. Not the best in terms of visibility but it will do. Use this value to populate the channel id text field in Jenkins.
 
-## Remote Jenkins
-
-We had to deploy a remote Jenkins instance. By default, pods running in OpenShift are configured under the default security context which means ssh’ing as an Administrator to perform adminstrative functions is out of the question. As such, we have spun up a virtual server on IBM Cloud and ran Jenkins as a docker image within it.
-
-The procedure is a such:
-
-1) Deploy a Centos 7.9 VSI on BM Cloud. Any server will do, so as long as Docker can be downloaded and installed.
-
-2) Installed Docker on the VM. Steps given [here](https://docs.genesys.com/Documentation/System/latest/DDG/InstallationofDockerEngineCommunityEditiononCentOS7).
-    1) Note: It would be ideal to make an image out of this server to be used in the future. This way, we don’t need to install Docker all the time.
-    2) Note: Depending on the OS of the server you deployed, the steps required to install and run docker will likely be different. Consult the relevant documentation in such case.
-
-3) Run docker command to run Jenkins. The command is as such:
-    1) docker run --name jenkins -d -p 8080:8080 -p 50000:50000 --restart=on-failure -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts-jdk11
-
-4) Python, pip, and virtualenv were installed in the docker container as root (sudo is implied). The commands are as such:
-    1) apt-get install python3
-    2) apt-get install pip3
-    3) apt-get install python3-venv
-    4) NOTE: It would be ideal to make our own Jenkins image with these preinstalled defaults in the future. Save this image to our own registry to be used downstream with minimal fuss.
-
-5) The user which executes the jenkins pipelines/scripts is the jenkins user by default. We made a targeted vritualenv for this user and dynamically installed the required dependencies on that env. This is performed by the Jenkins job (in the event the PR added a new library to the requirements.txt). This environment is used when the pipeline is triggered. Right now, we have a freestyle job. Future work includes making a Jenkinsfile pipeline out of this.
-    1) The script can be found in the utils directory.
-
-6) We have created secrets for the job, project and api key as required by the script. The job references said secrets. The procedure is described [here](https://plugins.jenkins.io/credentials-binding/).
-    1) Here are some additional considerations when it comes to storing data in [Jenkins](https://stackoverflow.com/questions/8419385/jenkins-what-is-a-good-way-to-store-a-variable-between-two-job-runs)

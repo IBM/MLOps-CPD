@@ -678,3 +678,5 @@ and log the models in Factsheets with the `save_log_facts()` function in the [no
 After the model has been deployed to pre-prod and prod environments, and evaluated by Openscale, the deployments can be seen in the model entry (in Watson Knowledge Catalog):
 
 <img width="1467" alt="Screenshot 2022-11-28 at 4 17 15 am" src="https://user-images.githubusercontent.com/77606025/204152565-b9942c0e-48e7-4412-ac3e-92a4787f1e23.png">
+
+.
