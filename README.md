@@ -297,11 +297,9 @@ AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
 
 Now you are ready to start!
 
-## Github Access Token in Notebooks 
+## Helper scripts in Watson Studio (CPDaaS)
 
-As the asset was developed in CPDSaaS, the only efficient way to include the utility scripts in the notebook was to use a git clone route with personal access token. So in most notebooks you will see an access token that belongs to Nijesh Or Sherry. We shall modify this and add a better way in the next iteration as the asset is moved to CPD on-prem ; which has file system unlike CPDSaaS. For now if you get an error to Import MLOps_CPD repository , please refresh it with your git access token here.
-In the below notebook you can see the accesstoken embeddded : You may need to change that in case of any import errors. You are encouraged to use your personal access token from github.
-For now, it has been duly documented in the notebooks as you see in the image below.
+As the asset was developed in CPDSaaS, the only efficient way to include the utility scripts in the notebook was to use a git clone to get the scripts into the working directory. For now, it has been duly documented in the notebooks as you see in the image below.
 
 <img width="1000" alt="Screenshot 2022-12-06 at 1 54 04 PM" src="https://user-images.githubusercontent.com/8414621/205830002-73375a89-787e-4c1f-814f-f9accd3e566b.png">
 
