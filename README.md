@@ -24,7 +24,6 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
   * [1.3. Preparing the Notebooks](#13-preparing-the-notebooks)
     + [Python environment customisations](#python-environment-customisations)
     + [Retrieving required credentials (IBM Cloud API key and COS credentials)](#retrieving-required-credentials--ibm-cloud-api-key-and-cos-credentials-)
-  * [Github Access Token in Notebooks](#github-access-token-in-notebooks)
       - [How to create a WS Pipeline in CP4D](#how-to-create-a-ws-pipeline-in-cp4d)
       - [NOTE: you will need to save a Jupyter notebook version for WS Pipeline to work](#note--you-will-need-to-save-a-jupyter-notebook-version-for-ws-pipeline-to-work)
       - [To check the log and debug a pipeline](#to-check-the-log-and-debug-a-pipeline)
@@ -82,7 +81,7 @@ For OpenScale, we have ml providers:
   2. MLOps_Prod : To Subscribe to all models in the prod environment.
 
 ### Branch management
-This repo has two branches, `master` and `pre-prod`. The `master` branch is served as the dev branch, and receives direct commits from the linked `CP4D` prject. When a pull request is created to merge the changes into the pre-prod branch, Jenkins will automatically start the CI tests. 
+This repo has two branches, `master` and `pre-prod`. The `master` branch is served as the dev branch, and receives direct commits from the linked `CP4D` project. When a pull request is created to merge the changes into the pre-prod branch, Jenkins will automatically start the CI tests. 
 
 ### Dataset and data science problem
 In this example we use the German Credit dataset and aim to predict credit risk. The dataset can be downloaded from [here](https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv).
@@ -299,13 +298,12 @@ Now you are ready to start!
 
 ## Helper scripts in Watson Studio (CPDaaS)
 
-As the asset was developed in CPDSaaS, the only efficient way to include the utility scripts in the notebook was to use a git clone to get the scripts into the working directory. For now, it has been duly documented in the notebooks as you see in the image below.
+As the asset was developed in CPDSaaS, the only efficient way to include the utility scripts in the notebook was to use a git clone to get the scripts into the working directory. For now, it has been duly documented in the notebooks as you see in the image below. 
 
 <img width="1000" alt="Screenshot 2022-12-06 at 1 54 04 PM" src="https://user-images.githubusercontent.com/8414621/205830002-73375a89-787e-4c1f-814f-f9accd3e566b.png">
 
 
-
-#### How to create a WS Pipeline in CP4D
+#### How to create a WS Pipeline
 
 In your CP4D project, click the blue button `New Asset +`. Then find `Pipelines`
 
@@ -321,22 +319,23 @@ Expand the `Run` section and drag and drop the `Run notebook` block.
 
 Double click the block to edit the node.
 
-#### NOTE: you will need to save a Jupyter notebook version for WS Pipeline to work
+#### How to create a WS Notebook Job
 
-WS Pipeline requires all the Jupyter notebooks to have a version saved before it can run the notebook, failing to do that will result in the below error: 
+In an earlier version of Watson Studio Pipelines, you were able to drag a `Run notebook` block into the canvas to use as pipeline node. This functionality has been replaced with the `Run notebook job` block.
 
-![Screenshot 2022-11-28 at 8 15 25 pm](https://user-images.githubusercontent.com/77606025/204240070-71ee196e-b653-4b3b-b242-57da12c070a8.png)
+Prior to selecting a Notebook within the Settings of the `Run notebook job` block, you have to create a notebook job from the Project Space View under the Assets tab.
 
-To save a version of the notebook, go to the notebook editor model in your CP4D project, select the top right round icon to open the version menu, and click `Save version`.
+![notebook-job_create](https://user-images.githubusercontent.com/15169745/218707846-70dfe420-dbc8-4022-afd7-dfe2defaf61b.png)
 
+For the MLOps workflow to work as intended, it is important that you select `Latest` as the notebook Version for your notebook job. Otherwise, the notebook job block in your pipeline will be set to a specific previous version of the notebook, therefore changes in your code would not affect your pipeline.
 
-![Screenshot 2022-11-28 at 8 21 54 pm](https://user-images.githubusercontent.com/77606025/204240804-4996134c-c7db-4dd8-ad9f-84d876cff91d.png)
+![notebook-job_versioning](https://user-images.githubusercontent.com/15169745/218708971-24130964-632a-4e37-b988-6429f6a83be3.png)
 
+However, even when having selected `Latest` as the notebook version to use for your notebook job, you will have to select `File` > `Save Version` after performing code changes in your notebook. Only then will the notebook register the changes.
 
 #### To check the log and debug a pipeline
 
 When the pipeline is running, double click on the node that is currently running to open Node Inspector, as shown in the below image. The log will contain all the notebook run status, the prints and errors where the notebook fails.
-
 
 ![Screenshot 2022-11-28 at 7 45 43 pm](https://user-images.githubusercontent.com/77606025/204234082-95c90b64-a380-4450-887d-a231527ffed7.png)
 
