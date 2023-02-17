@@ -24,7 +24,8 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
   * [1.3. Preparing the Notebooks](#13-preparing-the-notebooks)
     + [Python environment customisations](#python-environment-customisations)
     + [Retrieving required credentials (IBM Cloud API key and COS credentials)](#retrieving-required-credentials--ibm-cloud-api-key-and-cos-credentials-)
-  * [Helper scripts in Watson Studio (CPDaaS)](#helper-scripts-in-watson-studio--cpdaas-)
+    + [Adding the Notebooks (CPDaaS)](#adding-the-notebooks--cpdaas-)
+    + [Adding the Notebooks (On-Prem)](#adding-the-notebooks--on-prem-)
       - [How to create a WS Pipeline](#how-to-create-a-ws-pipeline)
       - [How to create a WS Notebook Job](#how-to-create-a-ws-notebook-job)
       - [To check the log and debug a pipeline](#to-check-the-log-and-debug-a-pipeline)
@@ -52,6 +53,7 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
     + [Model monitoring](#model-monitoring)
     + [Model retraining](#model-retraining)
   * [2.4. AI Factsheets](#24-ai-factsheets)
+
 
 ## Overview
 
@@ -305,6 +307,7 @@ In the tool selection, select `Jupyter notebook editor`. Upload the desired note
 **Repeat this procedure for all notebooks.**
 
 TODO: Take all COS params (projectspace bucket, individual bucket) and add them as parameters for the first pipeline notebook job and pass them along the pipeline.
+
 
 
 **Note**: As previously mentioned, CPDaaS does not come with a filesystem. The only efficient way to include utility scripts to e.g. handle catalog operations is to clone the repository manually from the notebook. This has been documented in each notebook. The corresponding cells must only be run if operating on CPDaaS.
