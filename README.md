@@ -282,7 +282,7 @@ The variables are:
 
 ---
 
-You should set them at the top level of each notebook.
+You will need to set them at the top-level of each notebook.
 Here is an example:
 
 ```python3
@@ -322,7 +322,10 @@ In the tool selection, select `Jupyter notebook editor`. Upload the desired note
 tbd
 
 
-#### How to create a WS Pipeline
+# 2. Pipeline Setup
+
+<details>
+<summary><b>⚠️ How to create a WS Pipeline</b></summary>
 
 In your CP4D project, click the blue button `New Asset +`. Then find `Pipelines`
 
@@ -338,7 +341,12 @@ Expand the `Run` section and drag and drop the `Run notebook` block.
 
 Double click the block to edit the node.
 
-#### How to create a WS Notebook Job
+</details>
+
+---
+
+<details>
+<summary><b>⚠️ How to create a WS Notebook Job</b></summary>
 
 In an earlier version of Watson Studio Pipelines, you were able to drag a `Run notebook` block into the canvas to use as pipeline node. This functionality has been replaced with the `Run notebook job` block.
 
@@ -358,8 +366,9 @@ When the pipeline is running, double click on the node that is currently running
 
 ![Screenshot 2022-11-28 at 7 45 43 pm](https://user-images.githubusercontent.com/77606025/204234082-95c90b64-a380-4450-887d-a231527ffed7.png)
 
+</details>
 
-# 2. Pipeline Setup
+---
 
 ## 2.1. Development
 
