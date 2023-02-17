@@ -14,7 +14,7 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
 
   * [Overview](#overview)
     + [Important consideration: CPDaaS vs. On-Prem](#important-consideration--cpdaas-vs-on-prem)
-    + [Prerequisites on IBM Cloud:](#prerequisites-on-ibm-cloud-)
+    + [Prerequisites on IBM Cloud](#prerequisites-on-ibm-cloud)
     + [Branch management](#branch-management)
     + [Dataset and data science problem](#dataset-and-data-science-problem)
     + [Process overview](#process-overview)
@@ -24,8 +24,9 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
   * [1.3. Preparing the Notebooks](#13-preparing-the-notebooks)
     + [Python environment customisations](#python-environment-customisations)
     + [Retrieving required credentials (IBM Cloud API key and COS credentials)](#retrieving-required-credentials--ibm-cloud-api-key-and-cos-credentials-)
-      - [How to create a WS Pipeline in CP4D](#how-to-create-a-ws-pipeline-in-cp4d)
-      - [NOTE: you will need to save a Jupyter notebook version for WS Pipeline to work](#note--you-will-need-to-save-a-jupyter-notebook-version-for-ws-pipeline-to-work)
+  * [Helper scripts in Watson Studio (CPDaaS)](#helper-scripts-in-watson-studio--cpdaas-)
+      - [How to create a WS Pipeline](#how-to-create-a-ws-pipeline)
+      - [How to create a WS Notebook Job](#how-to-create-a-ws-notebook-job)
       - [To check the log and debug a pipeline](#to-check-the-log-and-debug-a-pipeline)
 - [2. Pipeline Setup](#2-pipeline-setup)
   * [2.1. Development](#21-development)
@@ -58,7 +59,7 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
 When this asset was created from scratch, it was laid out for our CPDaaS solution. However, there are slight but - at least here - significant differences between the two including - but not limited to - the absence of a file system and a less refined Git integration in CPDaaS.
 We are currently weighing the pros and cons of two approaches: Highlighting points of this documentation where CPDaaS is limited (including a work-around), or offering a separate repository.
 
-### Prerequisites on IBM Cloud:
+### Prerequisites on IBM Cloud
 In order to use the above asset we need to have access to have an IBM environment with authentication.
 IBM Cloud Account with following services:
   1. IBM Watson Studio
@@ -75,10 +76,6 @@ Please ascertain you have appropriate access in all the services.
   2. https://cloud.ibm.com/catalog/services/watson-machine-learning
   3. https://cloud.ibm.com/catalog/services/watson-openscale
   4. https://cloud.ibm.com/catalog/services/watson-knowledge-catalog
-
-For OpenScale, we have ml providers:
-  1. MLOps_Preprod : To Subscribe to all the models in dev and pre-prod environments.
-  2. MLOps_Prod : To Subscribe to all models in the prod environment.
 
 ### Branch management
 This repo has two branches, `master` and `pre-prod`. The `master` branch is served as the dev branch, and receives direct commits from the linked `CP4D` project. When a pull request is created to merge the changes into the pre-prod branch, Jenkins will automatically start the CI tests. 
@@ -151,11 +148,11 @@ For IBM WML, We have three spaces:
 
 ## 1.3. Preparing the Notebooks
 
-In this section, we will first setup the custom Python environments, collect necessary credentials, upload the notebooks, and modify them.
+In this section, we will first setup the custom Python environments, collect necessary credentials, upload the notebooks, and modify them. The pre-defined environments (henceforth called `software configuration`) do not contain all the Python packages we require. Therefore we will create custom software configurations prior to adding the notebooks.
 
 ### Python environment customisations
 
-Some of the notebooks require quite a few dependencies, which should not be manually installed via `pip` in each notebook every time. To avoid doing that, we will create custom environments. They are alternatively called `Software Configurations` across Watson Studio Documentation.
+Some of the notebooks require quite a few dependencies, which should not be manually installed via `pip` in each notebook every time. To avoid doing that, we will create software configurations.
 
 ---
 <details>
@@ -296,11 +293,26 @@ AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
 
 Now you are ready to start!
 
-## Helper scripts in Watson Studio (CPDaaS)
+### Adding the Notebooks (CPDaaS)
 
-As the asset was developed in CPDSaaS, the only efficient way to include the utility scripts in the notebook was to use a git clone to get the scripts into the working directory. For now, it has been duly documented in the notebooks as you see in the image below. 
+Download the repository to your local machine and navigate to your project space. On the asset tab, click `New Asset +`.
 
+<img width="1000" alt="mlops-new_notebook" src="https://user-images.githubusercontent.com/15169745/219624292-1fa33065-767e-40ab-9ea5-787d1d078014.png">
+
+In the tool selection, select `Jupyter notebook editor`. Upload the desired notebook. A name will automatically be assigned based on the filename. Make sure to select our previously added Software Configuration `Custom_python` as the environment to be used for the notebook.
+<img width="1000" alt="mlops-new_notebook_env" src="https://user-images.githubusercontent.com/15169745/219624258-61830dc2-bb8d-4204-a8ad-9b905df970a3.png">
+
+**Repeat this procedure for all notebooks.**
+
+TODO: Take all COS params (projectspace bucket, individual bucket) and add them as parameters for the first pipeline notebook job and pass them along the pipeline.
+
+
+**Note**: As previously mentioned, CPDaaS does not come with a filesystem. The only efficient way to include utility scripts to e.g. handle catalog operations is to clone the repository manually from the notebook. This has been documented in each notebook. The corresponding cells must only be run if operating on CPDaaS.
 <img width="1000" alt="Screenshot 2022-12-06 at 1 54 04 PM" src="https://user-images.githubusercontent.com/8414621/205830002-73375a89-787e-4c1f-814f-f9accd3e566b.png">
+
+### Adding the Notebooks (On-Prem)
+
+tbd
 
 
 #### How to create a WS Pipeline
