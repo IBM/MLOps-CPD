@@ -297,6 +297,11 @@ Now you are ready to start!
 
 ### Adding the Notebooks (CPDaaS)
 
+The Git integration within CPDaaS is not as advanced as that found in our On-Prem solution. As long as that is the case, the notebooks found in the repository must be manually added to the project space. 
+
+<details>
+<summary><b>💻 Manually adding a notebook to the project space</b></summary>
+
 Download the repository to your local machine and navigate to your project space. On the asset tab, click `New Asset +`.
 
 <img width="1000" alt="mlops-new_notebook" src="https://user-images.githubusercontent.com/15169745/219624292-1fa33065-767e-40ab-9ea5-787d1d078014.png">
@@ -306,8 +311,7 @@ In the tool selection, select `Jupyter notebook editor`. Upload the desired note
 
 **Repeat this procedure for all notebooks.**
 
-TODO: Take all COS params (projectspace bucket, individual bucket) and add them as parameters for the first pipeline notebook job and pass them along the pipeline.
-
+</details>
 
 
 **Note**: As previously mentioned, CPDaaS does not come with a filesystem. The only efficient way to include utility scripts to e.g. handle catalog operations is to clone the repository manually from the notebook. This has been documented in each notebook. The corresponding cells must only be run if operating on CPDaaS.
