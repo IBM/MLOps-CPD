@@ -324,6 +324,9 @@ tbd
 
 # 2. Pipeline Setup
 
+For this section you need to know how to create a WS Pipeline and how to correctly setup `Notebook Jobs`. Check out the following toggleable sections to learn how to do that.
+
+---
 <details>
 <summary><b>⚠️ How to create a WS Pipeline</b></summary>
 
