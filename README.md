@@ -160,9 +160,14 @@ Some of the notebooks require quite a few dependencies, which should not be manu
 <details>
 <summary><b>⚠️ Click here if you do not know how to customize environments in Watson Studio</b></summary>
 
-1. Under Tool runtimes on the Environments page on the Manage tab of your project, check that no runtime is active for the environment template that you want to change. If a runtime is active, you must stop it before you can change the template.
+1. Navigate to your Project overview, select the "Manage" tab and select "Environments" in the left-hand menu.
+Here, check that no runtime is active for the environment template that you want to change. If a runtime is active, you must stop it before you can change the template.
 
-2. Under Templates on the Environments page, select the template you want to customize and add your changes. You can't change the language of an existing environment template.
+<img width="1000" alt="software_config-create-button" src="https://user-images.githubusercontent.com/15169745/220061624-7ef06389-8dd2-4d06-8a16-5e2e6d440eb5.png">
+
+2. Under Templates click `New template +` and give it a name (for the pipeline preferably one of those described below), specify a hardware configuration (we recommend `2vCPU and 8GB RAM` for this project, but you can scale up or down depending on your task). When you are done click `Create`.
+
+<img width="1000" alt="software_config-create-window" src="https://user-images.githubusercontent.com/15169745/220061273-598b8754-5bff-4049-b654-e3f7d371cc4a.png">
 
 3. You can now create a software customization and specify the libraries to add to the standard packages that are available by default. 
 
