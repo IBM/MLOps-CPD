@@ -254,11 +254,22 @@ Before you run a notebook you need to obtain the following credentials and add t
 **b)** Secondly you will need the following IBM Cloud Object Storage (COS) related variables, which will allow the notebooks to interact with your COS Instance. 
 
 The variables are:
-1. `ENDPOINT_URL_MLOPS`
-2. `API_KEY_MLOPS`
-3. `CRN_MLOPS`
-4. `BUCKET_MLOPS`
-5. `AUTH_ENDPOINT`
+
+**Universal**
+- `AUTH_ENDPOINT`
+
+**Project Bucket (auto-generated e.g. `"mlops-donotdelete-pr-qxxcecxi1d"`)** 
+- AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
+- ENDPOINT_URL = "https://s3.private.us.cloud-object-storage.appdomain.cloud"
+- API_KEY_COS = "xxx"
+- BUCKET_PROJECT_COS = "mlops-donotdelete-pr-qxxcecxi1dtw94"
+
+
+**MLOps Bucket (e.g. `"mlops-asset"`)** 
+- ENDPOINT_URL_MLOPS = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
+- API_KEY_MLOPS = "xxx"
+- CRN_MLOPS = "xxx"
+- BUCKET_MLOPS  = "mlops-asset"
 
 ---
 <details>
@@ -291,11 +302,18 @@ You will need to set them at the top-level of each notebook.
 Here is an example:
 
 ```python3
-ENDPOINT_URL_MLOPS = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud/" # Adjust to your correct regional endpoints (eu-de etc.)
-API_KEY_MLOPS = apikey
-CRN_MLOPS = resource_instance_id
-BUCKET_MLOPS = "" # Name of the Bucket
+## PROJECT COS 
 AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
+ENDPOINT_URL = "https://s3.private.us.cloud-object-storage.appdomain.cloud"
+API_KEY_COS = "xxx"
+BUCKET_PROJECT_COS = "mlops-donotdelete-pr-qxxcecxi1dtw94"
+
+
+##MLOPS COS
+ENDPOINT_URL_MLOPS = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
+API_KEY_MLOPS = "xxx"
+CRN_MLOPS = "xxx"
+BUCKET_MLOPS  = "mlops-asset"
 ```
 
 Now you are ready to start!
