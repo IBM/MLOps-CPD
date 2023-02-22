@@ -259,17 +259,17 @@ The variables are:
 - `AUTH_ENDPOINT`
 
 **Project Bucket (auto-generated e.g. `"mlops-donotdelete-pr-qxxcecxi1d"`)** 
-- AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
-- ENDPOINT_URL = "https://s3.private.us.cloud-object-storage.appdomain.cloud"
-- API_KEY_COS = "xx"
-- BUCKET_PROJECT_COS = "mlops-donotdelete-pr-qxxcecxi1dtw94"
+- `AUTH_ENDPOINT` = "https://iam.cloud.ibm.com/oidc/token"
+- `ENDPOINT_URL` = "https://s3.private.us.cloud-object-storage.appdomain.cloud"
+- `API_KEY_COS` = "xx"
+- `BUCKET_PROJECT_COS` = "mlops-donotdelete-pr-qxxcecxi1dtw94"
 
 
 **MLOps Bucket (e.g. `"mlops-asset"`)** 
-- ENDPOINT_URL_MLOPS = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
-- API_KEY_MLOPS = "xx"
-- CRN_MLOPS = "xx"
-- BUCKET_MLOPS  = "mlops-asset"
+- `ENDPOINT_URL_MLOPS` = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
+- `API_KEY_MLOPS` = "xx"
+- `CRN_MLOPS` = "xx"
+- `BUCKET_MLOPS`  = "mlops-asset"
 
 ---
 <details>
