@@ -1,16 +1,67 @@
 # MLOps-CPD
-This repo contains an IBM's narrative of MLOps. It uses services in IBM's Cloud Pak for Data stack to actualise what an MLOps flow looks like.
+
+This documentation describes IBM's MLOps flow implemented using services in IBM's Cloud Pak for Data stack. It therefore describes IBM's narrative of MLOps. The architecture consists of three stages: development, pre-prod, and prod. The process includes: receiving code updates, training, deploying, and monitoring models. The demo uses the German Credit dataset to predict credit risk. The code is written in Python 3.9 and requires access to IBM Watson Studio, Watson Machine Learning, Watson Knowledge Catalog, and Watson OpenScale.
 
 Note: The current implementation has been built on IBM Cloud (CPSaaS). But most of the current implementation barring few changes in authentication, should work well on Cloud Pak for Data on-prem. Based on the users' requests, we may release an on-prem version.
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png" width="750">
+</p>
 
-The overall architecture of the MLOps Flow is as below:
+<p align="center">
+  <em>Fig. 1.: Architecture of the MLOps flow</em>
+</p>
 
-![sherry_ml_diagram_20221205_03_export_02](https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png)
+  * [Overview](#overview)
+    + [Important consideration: CPDaaS vs. On-Prem](#important-consideration--cpdaas-vs-on-prem)
+    + [Prerequisites on IBM Cloud](#prerequisites-on-ibm-cloud)
+    + [Branch management](#branch-management)
+    + [Dataset and data science problem](#dataset-and-data-science-problem)
+    + [Process overview](#process-overview)
+- [1. Setup](#1-setup)
+  * [1.1. Creating a project in Watson Studio](#11-creating-a-project-in-watson-studio)
+  * [1.2. Creating the deployment spaces](#12-creating-the-deployment-spaces)
+  * [1.3. Preparing the Notebooks](#13-preparing-the-notebooks)
+    + [Python environment customisations](#python-environment-customisations)
+    + [Retrieving required credentials (IBM Cloud API key and COS credentials)](#retrieving-required-credentials--ibm-cloud-api-key-and-cos-credentials-)
+    + [Adding the Notebooks (CPDaaS)](#adding-the-notebooks--cpdaas-)
+    + [Adding the Notebooks (On-Prem)](#adding-the-notebooks--on-prem-)
+      - [How to create a WS Pipeline](#how-to-create-a-ws-pipeline)
+      - [How to create a WS Notebook Job](#how-to-create-a-ws-notebook-job)
+      - [To check the log and debug a pipeline](#to-check-the-log-and-debug-a-pipeline)
+- [2. Pipeline Setup](#2-pipeline-setup)
+  * [2.1. Development](#21-development)
+    + [Offline modeling](#offline-modeling)
+    + [Notebook 1: Connect and validate data](#notebook-1--connect-and-validate-data)
+    + [Notebook 2: Data preparation](#notebook-2--data-preparation)
+    + [Notebook 3: Model training and evaluation](#notebook-3--model-training-and-evaluation)
+    + [Notebook 4: Model deployment](#notebook-4--model-deployment)
+  * [2.2. Pre-prod](#22-pre-prod)
+    + [Continuous integration](#continuous-integration)
+    + [CI tests](#ci-tests)
+    + [Recommended CI tests](#recommended-ci-tests)
+    + [Continuous delivery - pipeline](#continuous-delivery---pipeline)
+    + [Data Extraction and Data Validation](#data-extraction-and-data-validation)
+    + [Data preparation](#data-preparation)
+    + [Model Training and Model Evaluation](#model-training-and-model-evaluation)
+    + [Model Deployment (pre-prod space)](#model-deployment--pre-prod-space-)
+    + [Model Monitoring and Model Validation](#model-monitoring-and-model-validation)
+    + [Notebook 5: Model monitoring](#notebook-5--model-monitoring)
+  * [2.3. Prod](#23-prod)
+    + [Deployment Checks](#deployment-checks)
+    + [Model deployment (prod space)](#model-deployment--prod-space-)
+    + [Model monitoring](#model-monitoring)
+    + [Model retraining](#model-retraining)
+  * [2.4. AI Factsheets](#24-ai-factsheets)
 
 
+## Overview
 
-## Pre-requisite Services on IBM Cloud:
+### Important consideration: CPDaaS vs. On-Prem
+When this asset was created from scratch, it was laid out for our CPDaaS solution. However, there are slight but - at least here - significant differences between the two including - but not limited to - the absence of a file system and a less refined Git integration in CPDaaS.
+We are currently weighing the pros and cons of two approaches: Highlighting points of this documentation where CPDaaS is limited (including a work-around), or offering a separate repository.
+
+### Prerequisites on IBM Cloud
 In order to use the above asset we need to have access to have an IBM environment with authentication.
 IBM Cloud Account with following services:
   1. IBM Watson Studio
@@ -20,7 +71,7 @@ IBM Cloud Account with following services:
 
 Please ascertain you have appropriate access in all the services.
   
-  The runs are also governed by the amount of CUH you have access to. 
+  The runs are also governed by the amount of capacity unit hours (CUH) you have access to. 
   If you are running on the free plan please refer to the following links:
   
   1. https://cloud.ibm.com/catalog/services/watson-studio
@@ -28,31 +79,102 @@ Please ascertain you have appropriate access in all the services.
   3. https://cloud.ibm.com/catalog/services/watson-openscale
   4. https://cloud.ibm.com/catalog/services/watson-knowledge-catalog
 
-For IBM WML, We have three spaces:
-  1. MLOps_Dev : Dev Space to deploy your models and test before being pushed to the pre-prod
-  2. MLOps_preprod : Pre-prod Space to deploy and test and validate your models. The Validator uses this environment before giving a go ahead to                                push the models in production.
-  3. MLOps_Prod : Production Space to deploy your validated models and monitor it.
+### Branch management
+This repo has two branches, `master` and `pre-prod`. The `master` branch is served as the dev branch, and receives direct commits from the linked `CP4D` project. When a pull request is created to merge the changes into the pre-prod branch, Jenkins will automatically start the CI tests. 
 
-
-For OpenScale, we have ml providers:
-  1. MLOps_Preprod : To Subscribe to all the models in dev and pre-prod environments.
-  2. MLOps_Prod : To Subscribe to all models in the prod environment.
-
-## Branch management
-This repo has two branches, `master` and `pre-prod`. The `master` branch is served as the dev branch, and receives direct commits from the linked `CP4D` prject. When a pull request is created to merge the changes into the pre-prod branch, Jenkins will automatically start the CI tests. 
-
-## Dataset and data science problem
+### Dataset and data science problem
 In this example we use the German Credit dataset and aim to predict credit risk. The dataset can be downloaded from [here](https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv).
 
-## Process overview
+### Process overview
 In this repo we demonstrate three steps in the MLOps process:
 
 1. Development: orchestrated experiments and generate source code for pipelines
 2. Pre-prod: receives code updates from dev stage and contain CI tests to make sure the new code/model integrates well, trains, deploys and monitors the model in the pre-prod deployment space to validate the model. The validated model can be deployed to prod once approved by the model validator.
 3. Prod: deploys the model in the prod environment and monitors it, triggers retraining jobs (eg. restart pre-prod pipeline or offline modeling)
 
+# 1. Setup
 
-## Python environment customisations
+## 1.1. Creating a project in Watson Studio
+
+You create a project to work with data and other resources to achieve a particular goal, such as building a model or integrating data.
+
+⚠️ We plan on offering this asset as a fully pre-built project space demo within the "Create a project from a sample or file" Option. For now, you will have to construct it manually.
+
+1. Click New project on the home page or on your Projects page.
+2. Create an empty project.
+3. On the New project screen, add a name. Make it short but descriptive.
+4. If appropriate for your use case, mark the project as sensitive. The project has a sensitive tag and project collaborators can't move data assets out of the project. You cannot change this setting after the project is created.
+5. Choose an existing object storage service instance or create a new one.
+Click Create. You can start adding resources to your project.
+
+Along with the creation of a project, a bucket in your object storage instance will be created. This bucket will look like `[PROJECT_NAME]-donotdelete...`. 
+You can use this bucket through out this project, however we recommend creating a separate bucket in which we will store the dataset, train/test split et cetera.
+
+---
+<details>
+<summary><b>🪣 See how you can setup your own Bucket in COS</b></summary>
+
+1. Navigate to your COS as explain in Step 3 above.
+
+2. Click on buckets. Create a bucket.
+
+<img width="1000" src="https://user-images.githubusercontent.com/8414621/204450694-560792bc-ea54-437c-82c8-f623373a61f8.png">
+
+
+3. Click "Customise Bucket".
+
+<img width="1000" src="https://user-images.githubusercontent.com/8414621/204450827-70b032ce-a9b6-436a-963c-802d737009ca.png">
+
+4. Name the Bucket
+
+<img width="1000" src="https://user-images.githubusercontent.com/8414621/204451007-39aeb731-6933-41d3-8c42-6dd227eb08c3.png">
+
+5. Click create.
+<img width="1000" s
+rc="https://user-images.githubusercontent.com/8414621/204451022-c5f33efe-5282-4066-85b0-288b0d59057b.png">
+
+</details>
+
+
+---
+
+Now download the dataset ([german_credit_data_biased_training.csv](https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv)) and place it in the bucket you chose to use for the rest of this tutorial.
+
+
+## 1.2. Creating the deployment spaces
+
+For IBM WML, We have three spaces:
+  1. MLOps_Dev : Dev Space to deploy your models and test before being pushed to the pre-prod
+  2. MLOps_preprod : Pre-prod Space to deploy and test and validate your models. The Validator uses this environment before giving a go ahead to                                push the models in production.
+  3. MLOps_Prod : Production Space to deploy your validated models and monitor it.
+
+## 1.3. Preparing the Notebooks
+
+In this section, we will first setup the custom Python environments, collect necessary credentials, upload the notebooks, and modify them. The pre-defined environments (henceforth called `software configuration`) do not contain all the Python packages we require. Therefore we will create custom software configurations prior to adding the notebooks.
+
+### Python environment customisations
+
+Some of the notebooks require quite a few dependencies, which should not be manually installed via `pip` in each notebook every time. To avoid doing that, we will create software configurations.
+
+---
+<details>
+<summary><b>⚠️ Click here if you do not know how to customize environments in Watson Studio</b></summary>
+
+1. Navigate to your Project overview, select the "Manage" tab and select "Environments" in the left-hand menu.
+Here, check that no runtime is active for the environment template that you want to change. If a runtime is active, you must stop it before you can change the template.
+
+<img width="1000" alt="software_config-create-button" src="https://user-images.githubusercontent.com/15169745/220061624-7ef06389-8dd2-4d06-8a16-5e2e6d440eb5.png">
+
+2. Under Templates click `New template +` and give it a name (for the pipeline preferably one of those described below), specify a hardware configuration (we recommend `2vCPU and 8GB RAM` for this project, but you can scale up or down depending on your task). When you are done click `Create`.
+
+<img width="1000" alt="software_config-create-window" src="https://user-images.githubusercontent.com/15169745/220061273-598b8754-5bff-4049-b654-e3f7d371cc4a.png">
+
+3. You can now create a software customization and specify the libraries to add to the standard packages that are available by default. 
+
+(For more details, check out [Adding a customization](https://www.ibm.com/docs/en/cloud-paks/cp-data/4.6.x?topic=environments-adding-customization) in the Documentation)
+</details>
+
+---
 
 - Use Python 3.9 
 - Modify the `pip` part of the Python environment customisation script below: 
@@ -88,8 +210,6 @@ Environments used in this asset:
     - ibm_watson_studio_pipelines
 ```
 
-
-
 `pipeline_custom` environment
 ```
   - pip:
@@ -105,125 +225,181 @@ Environments used in this asset:
     - ibm-aigov-facts-client
 ```
 
-## Pre-requisite before running a notebook or pipeline:
+### Retrieving required credentials (IBM Cloud API key and COS credentials)
 
-Before you run a notebook you need to enter the value of following variables.
+Before you run a notebook you need to obtain the following credentials and add the COS credentials to the beginning of each notebook. The Cloud API key must not be added to the notebooks since it is passed through the pipeline later.
 
-a)The basic requirement is to get your CLOUD API KEY for all the pipelines.
+**a)** The basic requirement is to get your IBM Cloud API Key (`CLOUD_API_KEY`) for all the pipelines.
 
-1. You can go to https://cloud.ibm.com
-2. ![Screenshot 2022-11-29 at 1 55 12 PM](https://user-images.githubusercontent.com/8414621/204450079-c3c315a2-cd37-427d-9188-9eb4518ed37e.png)
-Select Manage -> Access(IAM).
-3. ![Screenshot 2022-11-29 at 1 56 18 PM](https://user-images.githubusercontent.com/8414621/204450245-3b759195-78ae-4542-bf8f-10553f417706.png)
-Click on the API keys and create new API Key.
+---
+<details>
+<summary><b>❓ Where can I create/generate an API Key?</b></summary>
+
+1. Navigate to https://cloud.ibm.com
+
+2. (On the top right) Select Manage > Access(IAM).
+
+<img src="https://user-images.githubusercontent.com/8414621/204450079-c3c315a2-cd37-427d-9188-9eb4518ed37e.png" width="250">
+
+3. Click on the API keys and create new API Key.
+
+<img src="https://user-images.githubusercontent.com/8414621/204450245-3b759195-78ae-4542-bf8f-10553f417706.png" width="700">
+
 4. Name the API Key and Copy or Download it.
 
-Your API KEY is ready for use for execution.
+</details>
 
-b)Secondly to get the COS Variables.These are hidden by default for obvious security reasons.
+---
+
+**b)** Secondly you will need the following IBM Cloud Object Storage (COS) related variables, which will allow the notebooks to interact with your COS Instance. 
+
 The variables are:
-1. ENDPOINT_URL_MLOPS
-2. API_KEY_MLOPS
-3. CRN_MLOPS
-4. BUCKET_MLOPS
-5. AUTH_ENDPOINT
 
-In order to get these credentials , if you are using the Test Cluster/Account you need to be added to Account number: 1500827. If you already have a cloud object storage provisioned, You need to create a Bucket.
+**Universal**
+- `AUTH_ENDPOINT` = "https://iam.cloud.ibm.com/oidc/token"
 
-Firstly,Let's go with the default step: You have access to the COS in Account Number: 1500827.
+**Project Bucket (auto-generated e.g. `"mlops-donotdelete-pr-qxxcecxi1d"`)** 
+- `ENDPOINT_URL` = "https://s3.private.us.cloud-object-storage.appdomain.cloud"
+- `API_KEY_COS` = "xx"
+- `BUCKET_PROJECT_COS` = "mlops-donotdelete-pr-qxxcecxi1dtw94"
+
+
+**MLOps Bucket (e.g. `"mlops-asset"`)** 
+- `ENDPOINT_URL_MLOPS` = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
+- `API_KEY_MLOPS` = "xx"
+- `CRN_MLOPS` = "xx"
+- `BUCKET_MLOPS`  = "mlops-asset"
+
+---
+<details>
+<summary><b>❓ Where can I find these credentials for Cloud Object Storage?</b></summary>
 
 1. Go to cloud.ibm.com and select the account from the drop down.
 2. Go to Resource list by either clicking on the left hand side button or https://cloud.ibm.com/resources.
-3. Go to Storage and select "ak-cos-poc-phoenix-ph". 
-![Screenshot 2022-11-29 at 1 19 03 PM](https://user-images.githubusercontent.com/8414621/204445270-eb9286c0-41e3-4bb9-92fc-0050e6c81661.png)
+3. Go to Storage and select the Cloud Object Storage instance that you want to use. 
+
+<img src="https://user-images.githubusercontent.com/8414621/204445270-eb9286c0-41e3-4bb9-92fc-0050e6c81661.png" width="250">
+  
 4. Select  "Service Credentials"  and Click "New Credential:
-![Screenshot 2022-11-29 at 1 49 53 PM](https://user-images.githubusercontent.com/8414621/204449450-b49f0e64-f684-4d67-b873-29de89e87759.png)
+
+<img src="https://user-images.githubusercontent.com/8414621/204449450-b49f0e64-f684-4d67-b873-29de89e87759.png" width="600">
+
+
 5. Name the credential and hit Add.
- ![Screenshot 2022-11-29 at 1 51 34 PM](https://user-images.githubusercontent.com/8414621/204449680-0b85eea4-419d-49b2-9da7-1cc814861149.png)
-6. Go to the Saved credential and click to see your credential.
-![Screenshot 2022-11-29 at 1 52 50 PM](https://user-images.githubusercontent.com/8414621/204449849-69d23454-675e-421e-8531-2cbed2235e4a.png)
-You can use these to fill the variables
+  
+<img src="https://user-images.githubusercontent.com/8414621/204449680-0b85eea4-419d-49b2-9da7-1cc814861149.png" width="600">
+  
+6. Go to the Saved credential and click to reveal your credential. You can use these values to fill the variables
+  
+<img src="https://user-images.githubusercontent.com/8414621/204449849-69d23454-675e-421e-8531-2cbed2235e4a.png" width="600">
+  
+</details>
 
-Now from the available credentails set the parameters as follows:
+---
 
-1. ENDPOINT_URL_MLOPS : or 'ENDPOINT_URL_MLOPS', go to endpoints variable and select the correct regional endpoints, an example can be :
+You will need to set them at the top-level of each notebook.
+Here is an example:
+
+```python3
+## PROJECT COS 
+AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
+ENDPOINT_URL = "https://s3.private.us.cloud-object-storage.appdomain.cloud"
+API_KEY_COS = "xxx"
+BUCKET_PROJECT_COS = "mlops-donotdelete-pr-qxxcecxi1dtw94"
+
+
+##MLOPS COS
 ENDPOINT_URL_MLOPS = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
-2. API_KEY_MLOPS = apikey
-3. CRN_MLOPS = resource_instance_id
-4. BUCKET_MLOPS = "name of the created bucket" eg "mlops-asset'
-5. AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
+API_KEY_MLOPS = "xxx"
+CRN_MLOPS = "xxx"
+BUCKET_MLOPS  = "mlops-asset"
+```
 
-The same is applicable for the next section.
+Now you are ready to start!
 
-Now if you want to use your own COS.
-------------------------------------
-1. Navigate to your COS as explain in Step 3 above.
-2. Click on buckets. Create a bucket.
- ![Screenshot 2022-11-29 at 1 59 27 PM](https://user-images.githubusercontent.com/8414621/204450694-560792bc-ea54-437c-82c8-f623373a61f8.png)
-3. Click "Customise Bucket".
-![Screenshot 2022-11-29 at 2 00 11 PM](https://user-images.githubusercontent.com/8414621/204450827-70b032ce-a9b6-436a-963c-802d737009ca.png)
-4. Name the Bucket
-![Screenshot 2022-11-29 at 2 01 02 PM](https://user-images.githubusercontent.com/8414621/204451007-39aeb731-6933-41d3-8c42-6dd227eb08c3.png)
-5. Click create.
-![Screenshot 2022-11-29 at 2 01 12 PM](https://user-images.githubusercontent.com/8414621/204451022-c5f33efe-5282-4066-85b0-288b0d59057b.png)
+### Adding the Notebooks (CPDaaS)
 
-6. Download the data from : https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv
-and place it in the bucket. 
+The Git integration within CPDaaS is not as advanced as that found in our On-Prem solution. As long as that is the case, the notebooks found in the repository must be manually added to the project space. 
 
+<details>
+<summary><b>💻 Manually adding a notebook to the project space</b></summary>
 
-Now you are ready to start!!!!
+Download the repository to your local machine and navigate to your project space. On the asset tab, click `New Asset +`.
 
-## Github Access Token in Notebooks 
+<img width="1000" alt="mlops-new_notebook" src="https://user-images.githubusercontent.com/15169745/219624292-1fa33065-767e-40ab-9ea5-787d1d078014.png">
 
-As the asset was developed in CPDSaaS, the only efficient way to include the utility scripts in the notebook was to use a git clone route with personal access token. So in most notebooks you will see an access token that belongs to Nijesh Or Sherry. We shall modify this and add a better way in the next iteration as the asset is moved to CPD on-prem ; which has file system unlike CPDSaaS. For now if you get an error to Import MLOps_CPD repository , please refresh it with your git access token here.
-In the below notebook you can see the accesstoken embeddded : You may need to change that in case of any import errors. You are encouraged to use your personal access token from github.
-For now, it has been duly documented in the notebooks as you see in the image below.
+In the tool selection, select `Jupyter notebook editor`. Upload the desired notebook. A name will automatically be assigned based on the filename. Make sure to select our previously added Software Configuration `Custom_python` as the environment to be used for the notebook.
+<img width="1000" alt="mlops-new_notebook_env" src="https://user-images.githubusercontent.com/15169745/219624258-61830dc2-bb8d-4204-a8ad-9b905df970a3.png">
 
-![Screenshot 2022-12-06 at 1 54 04 PM](https://user-images.githubusercontent.com/8414621/205830002-73375a89-787e-4c1f-814f-f9accd3e566b.png)
+**Repeat this procedure for all notebooks.**
+
+</details>
+<br>
+
+**Note**: As previously mentioned, CPDaaS does not come with a filesystem. The only efficient way to include utility scripts (see [utility scripts](utils)) to e.g. handle catalog operations is to clone the repository manually from the notebook. This has been documented in each notebook. The corresponding cells are commented out at the top level of each notebook and must only be uncommented when operating on CPDaaS.
+
+<img width="1048" alt="load_utils" src="https://user-images.githubusercontent.com/15169745/221542329-3e8b59ad-518e-48ce-ba3b-e4692de10817.png">
 
 
+### Adding the Notebooks (On-Prem)
 
-### How to create a WS Pipeline in CP4D
+tbd
+
+
+# 2. Pipeline Setup
+
+For this section you need to know how to create a WS Pipeline and how to correctly setup `Notebook Jobs`. Check out the following toggleable sections to learn how to do that.
+
+---
+<details>
+<summary><b>⚠️ How to create a WS Pipeline</b></summary>
 
 In your CP4D project, click the blue button `New Asset +`. Then find `Pipelines`
 
-<img width="1657" alt="Screenshot 2022-11-25 at 2 05 04 pm" src="https://user-images.githubusercontent.com/77606025/203892669-27589779-ad9f-458b-a0fc-7d6fca728459.png">
+<img width="1000" alt="Screenshot 2022-11-25 at 2 05 04 pm" src="https://user-images.githubusercontent.com/77606025/203892669-27589779-ad9f-458b-a0fc-7d6fca728459.png">
 
 Select Pipelines and give the pipeline a name. 
 
 Once the pipeline is created, you will see the pipeline edit menu and the palette on the left.
 
-<img width="513" alt="Screenshot 2022-11-25 at 2 10 16 pm" src="https://user-images.githubusercontent.com/77606025/203892823-e1500928-acc4-4c9f-8165-8c658ae5b5ce.png">
+<img width="500" alt="Screenshot 2022-11-25 at 2 10 16 pm" src="https://user-images.githubusercontent.com/77606025/203892823-e1500928-acc4-4c9f-8165-8c658ae5b5ce.png">
 
 Expand the `Run` section and drag and drop the `Run notebook` block. 
 
 Double click the block to edit the node.
 
-#### NOTE: you will need to save a Jupyter notebook version for WS Pipeline to work
+</details>
 
-WS Pipeline requires all the Jupyter notebooks to have a version saved before it can run the notebook, failing to do that will result in the below error: 
+---
 
-![Screenshot 2022-11-28 at 8 15 25 pm](https://user-images.githubusercontent.com/77606025/204240070-71ee196e-b653-4b3b-b242-57da12c070a8.png)
+<details>
+<summary><b>⚠️ How to create a WS Notebook Job</b></summary>
 
-To save a version of the notebook, go to the notebook editor model in your CP4D project, select the top right round icon to open the version menu, and click `Save version`.
+In an earlier version of Watson Studio Pipelines, you were able to drag a `Run notebook` block into the canvas to use as pipeline node. This functionality has been replaced with the `Run notebook job` block.
 
+Prior to selecting a Notebook within the Settings of the `Run notebook job` block, you have to create a notebook job from the Project Space View under the Assets tab.
 
-![Screenshot 2022-11-28 at 8 21 54 pm](https://user-images.githubusercontent.com/77606025/204240804-4996134c-c7db-4dd8-ad9f-84d876cff91d.png)
+![notebook-job_create](https://user-images.githubusercontent.com/15169745/218707846-70dfe420-dbc8-4022-afd7-dfe2defaf61b.png)
 
+For the MLOps workflow to work as intended, it is important that you select `Latest` as the notebook Version for your notebook job. Otherwise, the notebook job block in your pipeline will be set to a specific previous version of the notebook, therefore changes in your code would not affect your pipeline.
 
-### To check the log and debug a pipeline
+![notebook-job_versioning](https://user-images.githubusercontent.com/15169745/218708971-24130964-632a-4e37-b988-6429f6a83be3.png)
+
+However, even when having selected `Latest` as the notebook version to use for your notebook job, you will have to select `File` > `Save Version` after performing code changes in your notebook. Only then will the notebook register the changes.
+
+#### To check the log and debug a pipeline
 
 When the pipeline is running, double click on the node that is currently running to open Node Inspector, as shown in the below image. The log will contain all the notebook run status, the prints and errors where the notebook fails.
 
-
 ![Screenshot 2022-11-28 at 7 45 43 pm](https://user-images.githubusercontent.com/77606025/204234082-95c90b64-a380-4450-887d-a231527ffed7.png)
 
+</details>
 
+---
 
+## 2.1. Development
 
-# 1. Development
-
-## Offline modeling
+### Offline modeling
 Offline modeling includes the usually data exploration and data science experiments. In this step, you can try different data manipulation, feature engineering and machine learning models. 
 
 The output of this stage is code assets, for example Python scripts or Jupyter notebooks that can be used as blocks in the pipelines.
@@ -288,11 +464,11 @@ This notebook source code can be found in [deploy_model.ipynb](deploy_model.ipyn
 By changing the input to this notebook, the model can be deployed to dev, pre-prod and prod spaces. 
 
 
-# 2. Pre-prod 
+## 2.2. Pre-prod 
 
-## Continuous integration 
+### Continuous integration 
 
-When the Jupyter notebooks have a change commited and a pull request is made, Jenkins will start the CI tests.
+When the Jupyter notebooks have a change committed and a pull request is made, Jenkins will start the CI tests.
 
 The source code is stored in the [jenkins](jenkins) directory and the documentation can be viewed [here](jenkins/README.md)
 
@@ -301,7 +477,7 @@ The source code is stored in the [jenkins](jenkins) directory and the documentat
 - Pipeline component integration test: run the pipeline in dev environment to check if it successfully runs
 - Model Convergence test: check the training loss to see if it keeps declining
 
-## Recommended CI tests
+### Recommended CI tests
 - Behaviour Tests 
   - Invariance 
   - Directionality
@@ -319,10 +495,7 @@ The source code is stored in the [jenkins](jenkins) directory and the documentat
   - Test output errors are handled correctly 
  
 
-
-
-
-## Continuous delivery - pipeline
+### Continuous delivery - pipeline
 
 After the CI tests passed, the admin/data science lead will merge the changes and Jenkins will trigger the following `pre-prod` pipeline:
 
@@ -502,7 +675,7 @@ None
 
 Once the model is validated, and approved by the model validator, the model can be deployed to the prod environment.
 
-# 3. Prod 
+## 2.3. Prod 
 
 In this example we reuse the [deploy_model.ipynb](deploy_model.ipynb) and [monitor_models.ipynb](monitor_models.ipynb) to create the deployment job.
 
@@ -544,7 +717,7 @@ In OpenScale, the flow of the retraining looks like:
 - Openscale model monitoring alerts are triggered, and an email is received: manually trigger the retrain job to update the data and restart the pre-prod pipeline
 - Openscale model monitoring alerts are triggered, and an email is received: after some investigation, you decide that you want to try different models or features, therefore restart from the offline modeling stage. 
 
-## AI Factsheets
+## 2.4. AI Factsheets
 
 In this project we also demonstrate how we put the model into the a model registry and track the model with [AI Factsheets](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/factsheets-model-inventory.html)
 
