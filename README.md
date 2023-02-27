@@ -337,7 +337,7 @@ In the tool selection, select `Jupyter notebook editor`. Upload the desired note
 </details>
 
 
-**Note**: As previously mentioned, CPDaaS does not come with a filesystem. The only efficient way to include utility scripts to e.g. handle catalog operations is to clone the repository manually from the notebook. This has been documented in each notebook. The corresponding cells must only be run if operating on CPDaaS.
+**Note**: As previously mentioned, CPDaaS does not come with a filesystem. The only efficient way to include utility scripts (see [utility scripts](utils)) to e.g. handle catalog operations is to clone the repository manually from the notebook. This has been documented in each notebook. The corresponding cells must only be run if operating on CPDaaS.
 <img width="1000" alt="Screenshot 2022-12-06 at 1 54 04 PM" src="https://user-images.githubusercontent.com/8414621/205830002-73375a89-787e-4c1f-814f-f9accd3e566b.png">
 
 ### Adding the Notebooks (On-Prem)
@@ -467,7 +467,7 @@ By changing the input to this notebook, the model can be deployed to dev, pre-pr
 
 ### Continuous integration 
 
-When the Jupyter notebooks have a change commited and a pull request is made, Jenkins will start the CI tests.
+When the Jupyter notebooks have a change committed and a pull request is made, Jenkins will start the CI tests.
 
 The source code is stored in the [jenkins](jenkins) directory and the documentation can be viewed [here](jenkins/README.md)
 
