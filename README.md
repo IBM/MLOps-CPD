@@ -334,10 +334,12 @@ In the tool selection, select `Jupyter notebook editor`. Upload the desired note
 **Repeat this procedure for all notebooks.**
 
 </details>
+<br>
 
+**Note**: As previously mentioned, CPDaaS does not come with a filesystem. The only efficient way to include utility scripts (see [utility scripts](utils)) to e.g. handle catalog operations is to clone the repository manually from the notebook. This has been documented in each notebook. The corresponding cells are commented out at the top level of each notebook and must only be uncommented when operating on CPDaaS.
 
-**Note**: As previously mentioned, CPDaaS does not come with a filesystem. The only efficient way to include utility scripts (see [utility scripts](utils)) to e.g. handle catalog operations is to clone the repository manually from the notebook. This has been documented in each notebook. The corresponding cells must only be run if operating on CPDaaS.
-<img width="1000" alt="Screenshot 2022-12-06 at 1 54 04 PM" src="https://user-images.githubusercontent.com/8414621/205830002-73375a89-787e-4c1f-814f-f9accd3e566b.png">
+<img width="1048" alt="load_utils" src="https://user-images.githubusercontent.com/15169745/221542329-3e8b59ad-518e-48ce-ba3b-e4692de10817.png">
+
 
 ### Adding the Notebooks (On-Prem)
 
