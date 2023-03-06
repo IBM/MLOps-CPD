@@ -297,7 +297,7 @@ The variables are:
 
 ---
 
-You will need to set them at the top-level of each notebook.
+You will need to define those variables at the top level of each notebook.
 Here is an example:
 
 ```python3
@@ -313,6 +313,14 @@ ENDPOINT_URL_MLOPS = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
 API_KEY_MLOPS = "xxx"
 CRN_MLOPS = "xxx"
 BUCKET_MLOPS  = "mlops-asset"
+```
+
+**However**, to make things easier, you may set them as Global Pipeline Parameters later on.
+This will allow you to e.g. switch the COS Bucket you are using without having to edit mulitple notebooks. Instead, you will only have to edit the parameter. Taking advantage of this feature will prove itself useful when using multiple pipelines later on.
+
+The parameter strings should look like the example below in order for the notebooks to extract the correct values. Prepare one for your manually created Bucket and one for the Bucket attached to the project space.
+```json
+{"API_KEY": "abc", "CRN": null, "AUTH_ENDPOINT": "https://iam.cloud.ibm.com/oidc/token", "ENDPOINT_URL": "https://s3.private.us.cloud-object-storage.appdomain.cloud", "BUCKET": "mlopsshowcaseautoai-donotdelete-pr-diasjjegeind"}
 ```
 
 Now you are ready to start!
