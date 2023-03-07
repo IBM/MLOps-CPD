@@ -1,6 +1,8 @@
 # MLOps-CPD
 
-This documentation describes IBM's MLOps flow implemented using services in IBM's Cloud Pak for Data stack. It therefore describes IBM's narrative of MLOps. The architecture consists of three stages: development, pre-prod, and prod. The process includes: receiving code updates, training, deploying, and monitoring models. The demo uses the German Credit dataset to predict credit risk. The code is written in Python 3.9 and requires access to IBM Watson Studio, Watson Machine Learning, Watson Knowledge Catalog, and Watson OpenScale.
+This documentation describes IBM's MLOps flow implemented using services in IBM's Cloud Pak for Data stack. It therefore describes IBM's narrative of MLOps. The architecture consists of three stages: development, pre-prod, and prod. The process includes: receiving code updates, training, deploying, and monitoring models. 
+
+The demo uses the German Credit dataset to predict credit risk. The code is written in Python 3.9 and requires access to IBM Watson Studio, Watson Machine Learning, Watson Knowledge Catalog, and Watson OpenScale.
 
 Note: The current implementation has been built on IBM Cloud (CPSaaS). But most of the current implementation barring few changes in authentication, should work well on Cloud Pak for Data on-prem. Based on the users' requests, we may release an on-prem version.
 
@@ -89,13 +91,13 @@ In this repo we demonstrate three steps in the MLOps process:
 2. Pre-prod: receives code updates from dev stage and contain CI tests to make sure the new code/model integrates well, trains, deploys and monitors the model in the pre-prod deployment space to validate the model. The validated model can be deployed to prod once approved by the model validator.
 3. Prod: deploys the model in the prod environment and monitors it, triggers retraining jobs (eg. restart pre-prod pipeline or offline modeling)
 
-# 1. Setup
+# 1. Getting Started
 
-## 1.1. Creating a project in Watson Studio
+## 1.1. Creating a Project Space in Watson Studio
 
 You create a project to work with data and other resources to achieve a particular goal, such as building a model or integrating data.
 
-⚠️ We plan on offering this asset as a fully pre-built project space demo within the "Create a project from a sample or file" Option. For now, you will have to construct it manually.
+(⚠️ We plan on offering this asset as a fully pre-built project space demo within the "Create a project from a sample or file" Option. For now, you will have to construct it manually.)
 
 1. Click New project on the home page or on your Projects page.
 2. Create an empty project.
@@ -138,12 +140,12 @@ rc="https://user-images.githubusercontent.com/8414621/204451022-c5f33efe-5282-40
 Now download the dataset ([german_credit_data_biased_training.csv](https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv)) and place it in the bucket you chose to use for the rest of this tutorial.
 
 
-## 1.2. Creating the deployment spaces
+## 1.2. Creating Deployment Spaces
 
-For IBM WML, We have three spaces:
-  1. MLOps_Dev : Dev Space to deploy your models and test before being pushed to the pre-prod
-  2. MLOps_preprod : Pre-prod Space to deploy and test and validate your models. The Validator uses this environment before giving a go ahead to                                push the models in production.
-  3. MLOps_Prod : Production Space to deploy your validated models and monitor it.
+For IBM Watson Machine Learning, we will need three spaces:
+  1. MLOps_dev : Dev Space to deploy your models and test before being pushed to the pre-prod
+  2. MLOps_preprod : Pre-prod Space to deploy and test and validate your models. The Validator uses this environment before giving a go ahead to push the models in production.
+  3. MLOps_prod : Production Space to deploy your validated models and monitor it.
 
 ## 1.3. Preparing the Notebooks
 
@@ -162,7 +164,7 @@ Here, check that no runtime is active for the environment template that you want
 
 <img width="1000" alt="software_config-create-button" src="https://user-images.githubusercontent.com/15169745/220061624-7ef06389-8dd2-4d06-8a16-5e2e6d440eb5.png">
 
-2. Under Templates click `New template +` and give it a name (for the pipeline preferably one of those described below), specify a hardware configuration (we recommend `2vCPU and 8GB RAM` for this project, but you can scale up or down depending on your task). When you are done click `Create`.
+2. Under Templates click `New template +` and give it a name (for the pipeline preferably one of those described below), specify a hardware configuration (we recommend `2 vCPU and 8GB RAM` for this project, but you can scale up or down depending on your task). When you are done click `Create`.
 
 <img width="1000" alt="software_config-create-window" src="https://user-images.githubusercontent.com/15169745/220061273-598b8754-5bff-4049-b654-e3f7d371cc4a.png">
 
