@@ -480,12 +480,22 @@ When the Jupyter notebooks have a change committed and a pull request is made, J
 
 The source code is stored in the [jenkins](jenkins) directory and the documentation can be viewed [here](jenkins/README.md)
 
-### CI tests
+### CI Test Notebooks
 
-- Pipeline component integration test: run the pipeline in dev environment to check if it successfully runs
-- Model Convergence test: check the training loss to see if it keeps declining
+As with any other MLOps pipeline, you should rigorously check whether or not your current model meets all the requirements you defined. In order to test this, we added a folder containing a small repertoire of CI tests which you can find [here](ci_tests/).
 
-### Recommended CI tests
+It is the overarching idea that a Data Scientist works primarily with the Notebooks themselves and manually invokes the development pipeline in order to initially test their work. The updated Notebooks should only be committed and pushed to the repository if the development pipeline completes successfully. 
+
+Therefore we suggest that you use the CI test repertoire to the extend that you can. Add tests that you would like to have to the end of your development pipeline in a plug&play manner. 
+You may of course want to edit those CI test notebooks to set certain thresholds or even write your own tests.
+
+Examples:
+
+- Pipeline component integration test: run the pipeline in dev environment to check if it successfully runs.
+- [deserialize_artifact.ipynb](ci_tests/deserialize_artifact.ipynb) will download the model stored in your COS Bucket. It will be deserialized and loaded into memory which is tested by scoring a few rows of your test data. This test is thus ensuring successful serialization. You may extend this test by checking the size of the model in memory or the size of the serialized model in storage and set a threshold, in order for the pipeline to fail when your model exceeds a certain size.
+- [model_convergence](ci_tests/model_convergence.ipynb) will download the pickled training and validation loss data from your COS Bucket. It ensures that the training loss is continuously decreasing. You may extend this test by analysing training and validation loss to e.g. avoid serious underfitting or overfitting of the model.
+
+### Further recommended CI tests
 - Behaviour Tests 
   - Invariance 
   - Directionality
