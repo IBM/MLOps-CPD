@@ -26,9 +26,6 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
     + [Retrieving required credentials (IBM Cloud API key and COS credentials)](#retrieving-required-credentials--ibm-cloud-api-key-and-cos-credentials-)
     + [Adding the Notebooks (CPDaaS)](#adding-the-notebooks--cpdaas-)
     + [Adding the Notebooks (On-Prem)](#adding-the-notebooks--on-prem-)
-      - [How to create a WS Pipeline](#how-to-create-a-ws-pipeline)
-      - [How to create a WS Notebook Job](#how-to-create-a-ws-notebook-job)
-      - [To check the log and debug a pipeline](#to-check-the-log-and-debug-a-pipeline)
 - [2. Pipeline Setup](#2-pipeline-setup)
   * [2.1. Development](#21-development)
     + [Offline modeling](#offline-modeling)
@@ -38,8 +35,8 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
     + [Notebook 4: Model deployment](#notebook-4--model-deployment)
   * [2.2. Pre-prod](#22-pre-prod)
     + [Continuous integration](#continuous-integration)
-    + [CI tests](#ci-tests)
-    + [Recommended CI tests](#recommended-ci-tests)
+    + [CI Test Notebooks](#ci-test-notebooks)
+    + [Further recommended CI tests](#further-recommended-ci-tests)
     + [Continuous delivery - pipeline](#continuous-delivery---pipeline)
     + [Data Extraction and Data Validation](#data-extraction-and-data-validation)
     + [Data preparation](#data-preparation)
@@ -395,8 +392,7 @@ For the MLOps workflow to work as intended, it is important that you select `Lat
 
 However, even when having selected `Latest` as the notebook version to use for your notebook job, you will have to select `File` > `Save Version` after performing code changes in your notebook. Only then will the notebook register the changes.
 
-#### To check the log and debug a pipeline
-
+**To check the log and debug a pipeline**:
 When the pipeline is running, double click on the node that is currently running to open Node Inspector, as shown in the below image. The log will contain all the notebook run status, the prints and errors where the notebook fails.
 
 ![Screenshot 2022-11-28 at 7 45 43 pm](https://user-images.githubusercontent.com/77606025/204234082-95c90b64-a380-4450-887d-a231527ffed7.png)
@@ -493,7 +489,7 @@ Examples:
 
 - Pipeline component integration test: run the pipeline in dev environment to check if it successfully runs.
 - [deserialize_artifact.ipynb](ci_tests/deserialize_artifact.ipynb) will download the model stored in your COS Bucket. It will be deserialized and loaded into memory which is tested by scoring a few rows of your test data. This test is thus ensuring successful serialization. You may extend this test by checking the size of the model in memory or the size of the serialized model in storage and set a threshold, in order for the pipeline to fail when your model exceeds a certain size.
-- [model_convergence](ci_tests/model_convergence.ipynb) will download the pickled training and validation loss data from your COS Bucket. It ensures that the training loss is continuously decreasing. You may extend this test by analysing training and validation loss to e.g. avoid serious underfitting or overfitting of the model.
+- [model_convergence.ipynb](ci_tests/model_convergence.ipynb) will download the pickled training and validation loss data from your COS Bucket. It ensures that the training loss is continuously decreasing. You may extend this test by analysing training and validation loss to e.g. avoid serious underfitting or overfitting of the model.
 
 ### Further recommended CI tests
 - Behaviour Tests 
@@ -506,7 +502,6 @@ Examples:
   - Check specific groups within the test set to ensure performance is retained in this group after retraining  
 
 - Miscellaneous Tests
-  - Test loading artifacts (model into memory)
   - Test input data scheme 
   - Test with unexpected input types (null / Nan) 
   - Test output scheme is as expected 
