@@ -304,14 +304,14 @@ Here is an example:
 ## PROJECT COS 
 AUTH_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token"
 ENDPOINT_URL = "https://s3.private.us.cloud-object-storage.appdomain.cloud"
-API_KEY_COS = "xxx"
+API_KEY_COS = "xyz"
 BUCKET_PROJECT_COS = "mlops-donotdelete-pr-qxxcecxi1dtw94"
 
 
 ##MLOPS COS
 ENDPOINT_URL_MLOPS = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
-API_KEY_MLOPS = "xxx"
-CRN_MLOPS = "xxx"
+API_KEY_MLOPS = "xyz"
+CRN_MLOPS = "xyz"
 BUCKET_MLOPS  = "mlops-asset"
 ```
 
@@ -356,7 +356,7 @@ tbd
 
 # 2. Pipeline Setup
 
-For this section you need to know how to create a WS Pipeline and how to correctly setup `Notebook Jobs`. Check out the following toggleable sections to learn how to do that.
+For this section you need to know how to create a WS Pipeline and how to correctly setup `Notebook Jobs`, which you will need to add Notebooks to a Pipeline. Check out the following toggleable sections to learn how to do that.
 
 ---
 <details>
