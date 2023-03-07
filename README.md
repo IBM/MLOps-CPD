@@ -14,18 +14,19 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
   <em>Fig. 1.: Architecture of the MLOps flow</em>
 </p>
 
-  * [Overview](#overview)
+* [Overview](#overview)
     + [Important consideration: CPDaaS vs. On-Prem](#important-consideration--cpdaas-vs-on-prem)
     + [Prerequisites on IBM Cloud](#prerequisites-on-ibm-cloud)
     + [Branch management](#branch-management)
     + [Dataset and data science problem](#dataset-and-data-science-problem)
     + [Process overview](#process-overview)
-- [1. Setup](#1-setup)
-  * [1.1. Creating a project in Watson Studio](#11-creating-a-project-in-watson-studio)
-  * [1.2. Creating the deployment spaces](#12-creating-the-deployment-spaces)
+- [1. Getting Started](#1-getting-started)
+  * [1.1. Creating a Project Space in Watson Studio](#11-creating-a-project-space-in-watson-studio)
+  * [1.2. Creating Deployment Spaces](#12-creating-deployment-spaces)
   * [1.3. Preparing the Notebooks](#13-preparing-the-notebooks)
     + [Python environment customisations](#python-environment-customisations)
     + [Retrieving required credentials (IBM Cloud API key and COS credentials)](#retrieving-required-credentials--ibm-cloud-api-key-and-cos-credentials-)
+  * [1.4. Adding the Notebooks to the Project Space](#14-adding-the-notebooks-to-the-project-space)
     + [Adding the Notebooks (CPDaaS)](#adding-the-notebooks--cpdaas-)
     + [Adding the Notebooks (On-Prem)](#adding-the-notebooks--on-prem-)
 - [2. Pipeline Setup](#2-pipeline-setup)
@@ -323,6 +324,8 @@ The parameter strings should look like the example below in order for the notebo
 ```
 
 Now you are ready to start!
+
+## 1.4. Adding the Notebooks to the Project Space
 
 ### Adding the Notebooks (CPDaaS)
 
