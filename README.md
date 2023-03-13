@@ -57,10 +57,6 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
 
 ## Overview
 
-### Important consideration: CPDaaS vs. On-Prem
-When this asset was created from scratch, it was laid out for our CPDaaS solution. However, there are slight but - at least here - significant differences between the two including - but not limited to - the absence of a file system and a less refined Git integration in CPDaaS.
-We are currently weighing the pros and cons of two approaches: Highlighting points of this documentation where CPDaaS is limited (including a work-around), or offering a separate repository.
-
 ### Prerequisites on IBM Cloud
 In order to use the above asset we need to have access to have an IBM environment with authentication.
 IBM Cloud Account with following services:
@@ -326,6 +322,9 @@ The parameter strings should look like the example below in order for the notebo
 Now you are ready to start!
 
 ## 1.4. Adding the Notebooks to the Project Space
+
+When this asset was created from scratch, it was laid out for our CPDaaS solution. However, there are slight - but for this project relevant - differences between the two including the absence of a file system and a less refined Git integration in CPDaaS.
+We are currently weighing the pros and cons of two approaches: Highlighting points of this documentation where CPDaaS is limited (including a work-around), or offering a separate repository.
 
 ### Adding the Notebooks (CPDaaS)
 
