@@ -1,4 +1,4 @@
-# MLOps-CPD
+# MLOps in Cloud Pak for Data
 
 This documentation describes IBM's MLOps flow implemented using services in IBM's Cloud Pak for Data stack. It therefore describes IBM's narrative of MLOps. The architecture consists of three stages: development, pre-prod, and prod. The process includes: receiving code updates, training, deploying, and monitoring models. 
 
@@ -323,6 +323,8 @@ Now you are ready to start!
 
 ## 1.4. Adding the Notebooks to the Project Space
 
+This section describes how you can add the notebooks that take care of data connection, validation and preparation, as well as model training and deployment.
+
 When this asset was created from scratch, it was laid out for our CPDaaS solution. However, there are slight - but for this project relevant - differences between the two including the absence of a file system and a less refined Git integration in CPDaaS.
 We are currently weighing the pros and cons of two approaches: Highlighting points of this documentation where CPDaaS is limited (including a work-around), or offering a separate repository.
 
@@ -354,30 +356,9 @@ In the tool selection, select `Jupyter notebook editor`. Upload the desired note
 
 tbd
 
+## 1.5. Creating Notebook Jobs from Notebooks
 
-# 2. Pipeline Setup
-
-For this section you need to know how to create a WS Pipeline and how to correctly setup `Notebook Jobs`, which you will need to add Notebooks to a Pipeline. Check out the following toggleable sections to learn how to do that.
-
----
-<details>
-<summary><b>⚠️ How to create a WS Pipeline</b></summary>
-
-In your CP4D project, click the blue button `New Asset +`. Then find `Pipelines`
-
-<img width="1000" alt="Screenshot 2022-11-25 at 2 05 04 pm" src="https://user-images.githubusercontent.com/77606025/203892669-27589779-ad9f-458b-a0fc-7d6fca728459.png">
-
-Select Pipelines and give the pipeline a name. 
-
-Once the pipeline is created, you will see the pipeline edit menu and the palette on the left.
-
-<img width="500" alt="Screenshot 2022-11-25 at 2 10 16 pm" src="https://user-images.githubusercontent.com/77606025/203892823-e1500928-acc4-4c9f-8165-8c658ae5b5ce.png">
-
-Expand the `Run` section and drag and drop the `Run notebook` block. 
-
-Double click the block to edit the node.
-
-</details>
+In order to move a Notebook from a project space to a deployment space, you will have to create a Notebook Job. Notebook Jobs represent non-interactive executables of a snapshot your notebook. When creating a Notebook Job you are offered many options the choice of a Software Configuration (virtual-env), Notifications, and Scheduling. Most importantly you are offered the option to set a Notebook Job to a hard-set version of the Notebook, or to always use the "Latest Version". With the latter, the Notebook Job is always updated automatically subsequent to saving a Notebook.
 
 ---
 
@@ -404,6 +385,30 @@ When the pipeline is running, double click on the node that is currently running
 </details>
 
 ---
+
+# 2. Pipeline Setup
+
+For this section you need to know how to create a WS Pipeline and how to correctly setup `Notebook Jobs`, which you will need to add Notebooks to a Pipeline. Check out the following toggleable sections to learn how to do that.
+
+---
+<details>
+<summary><b>⚠️ How to create a WS Pipeline</b></summary>
+
+In your CP4D project, click the blue button `New Asset +`. Then find `Pipelines`
+
+<img width="1000" alt="Screenshot 2022-11-25 at 2 05 04 pm" src="https://user-images.githubusercontent.com/77606025/203892669-27589779-ad9f-458b-a0fc-7d6fca728459.png">
+
+Select Pipelines and give the pipeline a name. 
+
+Once the pipeline is created, you will see the pipeline edit menu and the palette on the left.
+
+<img width="500" alt="Screenshot 2022-11-25 at 2 10 16 pm" src="https://user-images.githubusercontent.com/77606025/203892823-e1500928-acc4-4c9f-8165-8c658ae5b5ce.png">
+
+Expand the `Run` section and drag and drop the `Run notebook` block. 
+
+Double click the block to edit the node.
+
+</details>
 
 ## 2.1. Development
 
