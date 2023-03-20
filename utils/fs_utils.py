@@ -153,6 +153,7 @@ class FSUtils:
         X,
         y,
         train_data_ref,
+        model_type="scikit-learn_1.0"
     ):
         # sourcery skip: use-named-expression
         self.wml_client.set.default_project(self.project_id)
@@ -170,7 +171,7 @@ class FSUtils:
 
         meta_props = {
             self.wml_client.repository.ModelMetaNames.NAME: model_name,
-            self.wml_client.repository.ModelMetaNames.TYPE: "scikit-learn_1.0",
+            self.wml_client.repository.ModelMetaNames.TYPE: model_type,
             self.wml_client.repository.ModelMetaNames.SOFTWARE_SPEC_UID: software_spec_uid,
             self.wml_client.repository.ModelMetaNames.LABEL_FIELD: target,
             self.wml_client._models.ConfigurationMetaNames.TRAINING_DATA_REFERENCES: train_data_ref,
