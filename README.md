@@ -14,8 +14,7 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
   <em>Fig. 1.: Architecture of the MLOps flow</em>
 </p>
 
-* [Overview](#overview)
-    + [Important consideration: CPDaaS vs. On-Prem](#important-consideration--cpdaas-vs-on-prem)
+  * [Overview](#overview)
     + [Prerequisites on IBM Cloud](#prerequisites-on-ibm-cloud)
     + [Branch management](#branch-management)
     + [Dataset and data science problem](#dataset-and-data-science-problem)
@@ -25,17 +24,16 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
   * [1.2. Creating Deployment Spaces](#12-creating-deployment-spaces)
   * [1.3. Preparing the Notebooks](#13-preparing-the-notebooks)
     + [Python environment customisations](#python-environment-customisations)
-    + [Retrieving required credentials (IBM Cloud API key and COS credentials)](#retrieving-required-credentials--ibm-cloud-api-key-and-cos-credentials-)
+    + [Required Credentials](#required-credentials)
   * [1.4. Adding the Notebooks to the Project Space](#14-adding-the-notebooks-to-the-project-space)
-    + [Adding the Notebooks (CPDaaS)](#adding-the-notebooks--cpdaas-)
-    + [Adding the Notebooks (On-Prem)](#adding-the-notebooks--on-prem-)
+  * [1.5. Creating Notebook Jobs from Notebooks](#15-creating-notebook-jobs-from-notebooks)
 - [2. Pipeline Setup](#2-pipeline-setup)
   * [2.1. Development](#21-development)
     + [Offline modeling](#offline-modeling)
-    + [Notebook 1: Connect and validate data](#notebook-1--connect-and-validate-data)
-    + [Notebook 2: Data preparation](#notebook-2--data-preparation)
-    + [Notebook 3: Model training and evaluation](#notebook-3--model-training-and-evaluation)
-    + [Notebook 4: Model deployment](#notebook-4--model-deployment)
+    + [Notebook 1: Connect and validate data](#notebook-1-connect-and-validate-data)
+    + [Notebook 2: Data preparation](#notebook-2-data-preparation)
+    + [Notebook 3: Model training and evaluation](#notebook-3-model-training-and-evaluation)
+    + [Notebook 4: Model deployment](#notebook-4-model-deployment)
   * [2.2. Pre-prod](#22-pre-prod)
     + [Continuous integration](#continuous-integration)
     + [CI Test Notebooks](#ci-test-notebooks)
@@ -44,12 +42,12 @@ Note: The current implementation has been built on IBM Cloud (CPSaaS). But most 
     + [Data Extraction and Data Validation](#data-extraction-and-data-validation)
     + [Data preparation](#data-preparation)
     + [Model Training and Model Evaluation](#model-training-and-model-evaluation)
-    + [Model Deployment (pre-prod space)](#model-deployment--pre-prod-space-)
+    + [Model Deployment (pre-prod space)](#model-deployment-pre-prod-space)
     + [Model Monitoring and Model Validation](#model-monitoring-and-model-validation)
-    + [Notebook 5: Model monitoring](#notebook-5--model-monitoring)
+    + [Notebook 5: Model monitoring](#notebook-5-model-monitoring)
   * [2.3. Prod](#23-prod)
     + [Deployment Checks](#deployment-checks)
-    + [Model deployment (prod space)](#model-deployment--prod-space-)
+    + [Model deployment (prod space)](#model-deployment-prod-space)
     + [Model monitoring](#model-monitoring)
     + [Model retraining](#model-retraining)
   * [2.4. AI Factsheets](#24-ai-factsheets)
@@ -221,7 +219,7 @@ Environments used in this asset:
     - ibm-aigov-facts-client
 ```
 
-### Retrieving required credentials (IBM Cloud API key and COS credentials)
+### Required Credentials
 
 Before you run a notebook you need to obtain the following credentials and add the COS credentials to the beginning of each notebook. The Cloud API key must not be added to the notebooks since it is passed through the pipeline later.
 
