@@ -239,7 +239,7 @@ class FSUtils:
         )
 
         model_details = self.wml_client.repository.store_model(
-            model=model, meta_props=meta_props, training_data=X, training_target=y
+            model=model, meta_props=meta_props#, training_data=X, training_target=y
         )
         model_uid = self.wml_client.repository.get_model_id(model_details)
         model_entry_asset_id = self.get_model_entry_asset_id_by_name(model_entry_name)
