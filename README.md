@@ -16,10 +16,10 @@ We understand that each organization is unique, and may therefore have unique ML
 </p>
 
   * [Overview](#overview)
+    + [Dataset, Model, and Data Science problem](#dataset-model-and-data-science-problem)
     + [Prerequisites on IBM Cloud](#prerequisites-on-ibm-cloud)
-    + [Branch management](#branch-management)
-    + [Dataset and data science problem](#dataset-and-data-science-problem)
-    + [Process overview](#process-overview)
+    + [Branch Management](#branch-management)
+    + [Process Overview](#process-overview)
 - [1. Getting Started](#1-getting-started)
   * [1.1. Creating a Project Space in Watson Studio](#11-creating-a-project-space-in-watson-studio)
   * [1.2. Creating Deployment Spaces](#12-creating-deployment-spaces)
@@ -79,10 +79,10 @@ Please ascertain you have appropriate access in all the services.
   3. https://cloud.ibm.com/catalog/services/watson-openscale
   4. https://cloud.ibm.com/catalog/services/watson-knowledge-catalog
 
-### Branch management
+### Branch Management
 This repo has two branches, `master` and `pre-prod`. The `master` branch is served as the dev branch, and receives direct commits from the linked `CP4D` project. When a pull request is created to merge the changes into the pre-prod branch, Jenkins will automatically start the CI tests. 
 
-### Process overview
+### Process Overview
 In this repo we demonstrate three steps in the MLOps process:
 
 1. Development: orchestrated experiments and generate source code for pipelines
