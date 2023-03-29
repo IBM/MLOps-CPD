@@ -1,10 +1,13 @@
 # MLOps in Cloud Pak for Data
 
-This documentation describes IBM's MLOps flow implemented using services in IBM's Cloud Pak for Data stack. It therefore describes IBM's narrative of MLOps. The architecture consists of three stages: development, pre-prod, and prod. The process includes: receiving code updates, training, deploying, and monitoring models. 
+**Welcome** 👋 to our MLOps repository!
 
-The demo uses the German Credit dataset to predict credit risk. The code is written in Python 3.9 and requires access to IBM Watson Studio, Watson Machine Learning, Watson Knowledge Catalog, and Watson OpenScale.
+This documentation describes IBM's MLOps flow implemented using services in IBM's Cloud Pak for Data stack. It therefore describes IBM's narrative of MLOps.
+This asset is specifically created to enable the **rapid and effortless creation of end-to-end machine learning workflows**, while simultaneously exhibiting the strengths of the products found in our Cloud Pak for Data stack.
 
-Note: The current implementation has been built on IBM Cloud (CPSaaS). But most of the current implementation barring few changes in authentication, should work well on Cloud Pak for Data on-prem. Based on the users' requests, we may release an on-prem version.
+We understand that each organization is unique, and may therefore have unique ML use cases that require solutions that are equally as unique. That is why - alongside simplicity - we've placed a strong emphasis on modularity. Our solution provides a full fundamental workflow documentation, and comes with plug-and-play integration for custom-built models (PyTorch, Tensorflow, Keras...) and CI tests. Additionally, our project is built using Watson Pipelines, which offers extensive drag-and-drop modularity, providing you with the flexibility and customization options you need to create tailored ML solutions that perfectly fit your organization's unique requirements.
+
+The demo uses the German Credit Risk dataset. In order to predict credit risk in the setup instructions below, we leverage an SKLearn Pipeline in which we place, train and test a LightGBM model. (Alternatively you may provide a custom-built model or choose one from [/custom_models](/custom_models/)). The code is written in Python 3.9 and requires access to IBM Watson Studio, Watson Machine Learning, Watson Knowledge Catalog, and Watson OpenScale. The architecture consists of three stages: development, pre-prod, and prod. The process includes: receiving code updates, training, deploying, and monitoring models. 
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png" width="750">
@@ -407,6 +410,7 @@ Expand the `Run` section and drag and drop the `Run notebook` block.
 Double click the block to edit the node.
 
 </details>
+---
 
 ## 2.1. Development
 
