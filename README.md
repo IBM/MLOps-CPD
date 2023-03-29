@@ -7,8 +7,6 @@ This asset is specifically created to enable the **rapid and effortless creation
 
 We understand that each organization is unique, and may therefore have unique ML use cases that require solutions that are equally as unique. That is why - alongside simplicity - we've placed a strong emphasis on modularity. Our solution provides a full fundamental workflow documentation, and comes with plug-and-play integration for custom-built models (PyTorch, Tensorflow, Keras...) and CI tests. Additionally, our project is built using Watson Pipelines, which offers extensive drag-and-drop modularity, providing you with the flexibility and customization options you need to create tailored ML solutions that perfectly fit your organization's unique requirements.
 
-The demo uses the German Credit Risk dataset. In order to predict credit risk in the setup instructions below, we leverage an SKLearn Pipeline in which we place, train and test a LightGBM model. (Alternatively you may provide a custom-built model or choose one from [/custom_models](/custom_models/)). The code is written in Python 3.9 and requires access to IBM Watson Studio, Watson Machine Learning, Watson Knowledge Catalog, and Watson OpenScale. The architecture consists of three stages: development, pre-prod, and prod. The process includes: receiving code updates, training, deploying, and monitoring models. 
-
 <p align="center">
   <img src="https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png" width="750">
 </p>
@@ -58,6 +56,11 @@ The demo uses the German Credit Risk dataset. In order to predict credit risk in
 
 ## Overview
 
+### Dataset, Model and Data Science problem
+Throughout the demo described in detail below, we use a [biased version](https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv) of the German Credit Risk dataset. In order to predict credit risk in the setup instructions below, we leverage an SKLearn Pipeline in which we place, train and test a LightGBM model. (Alternatively you may provide a custom-built model or choose one from [/custom_models](/custom_models/)). The code is written in Python 3.9 and requires access to IBM Watson Studio, Watson Machine Learning, Watson Knowledge Catalog, and Watson OpenScale. The architecture consists of three stages: development, pre-prod, and prod. The process includes: receiving code updates, training, deploying, and monitoring models. 
+
+In addition to common metrics (e.g. accuracy), it is crucial to ensure fairness and ethical considerations in the decision-making process. To address this, monitoring and testing must be conducted on a regular basis to identify and mitigate any potential biases in the model.
+
 ### Prerequisites on IBM Cloud
 In order to use the above asset we need to have access to have an IBM environment with authentication.
 IBM Cloud Account with following services:
@@ -78,9 +81,6 @@ Please ascertain you have appropriate access in all the services.
 
 ### Branch management
 This repo has two branches, `master` and `pre-prod`. The `master` branch is served as the dev branch, and receives direct commits from the linked `CP4D` project. When a pull request is created to merge the changes into the pre-prod branch, Jenkins will automatically start the CI tests. 
-
-### Dataset and data science problem
-In this example we use the German Credit dataset and aim to predict credit risk. The dataset can be downloaded from [here](https://github.com/IBM/watson-openscale-samples/blob/main/Cloud%20Pak%20for%20Data/WML/assets/data/credit_risk/german_credit_data_biased_training.csv).
 
 ### Process overview
 In this repo we demonstrate three steps in the MLOps process:
