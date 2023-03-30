@@ -5,7 +5,7 @@
 This documentation describes IBM's MLOps flow implemented using services in IBM's Cloud Pak for Data stack. It therefore describes IBM's narrative of MLOps.
 This asset is specifically created to enable the **rapid and effortless creation of end-to-end machine learning workflows**, while simultaneously exhibiting the strengths of the products found in our Cloud Pak for Data stack.
 
-We understand that each organization is unique, and may therefore have unique ML use cases that require solutions that are equally as unique. That is why - alongside simplicity - we've placed a strong emphasis on modularity. Our solution provides a full fundamental workflow documentation, and comes with plug-and-play integration for custom-built models (PyTorch, Tensorflow, Keras...) and CI tests. Additionally, our project is built using Watson Pipelines, which offers extensive drag-and-drop modularity, providing you with the flexibility and customization options you need to create tailored ML solutions that perfectly fit your organization's unique requirements.
+We understand that organizations may come with unique ML use cases, which is why - alongside simplicity - we've placed a strong emphasis on modularity. Our solution provides a full fundamental workflow documentation, and comes with plug-and-play integration for custom-built models (PyTorch, Tensorflow, Keras...) and CI tests. Additionally, our project is built using Watson Pipelines, which offers extensive drag-and-drop modularity, providing you with the flexibility and customization options you need to create tailored ML solutions that perfectly fit your organization's unique requirements.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/77606025/205662631-97bb8875-c799-4fd9-9bb0-71c4b0e0be12.png" width="750">
@@ -85,9 +85,9 @@ This repo has two branches, `master` and `pre-prod`. The `master` branch is serv
 ### Process Overview
 In this repo we demonstrate three steps in the MLOps process:
 
-1. Development: orchestrated experiments and generate source code for pipelines
-2. Pre-prod: receives code updates from dev stage and contain CI tests to make sure the new code/model integrates well, trains, deploys and monitors the model in the pre-prod deployment space to validate the model. The validated model can be deployed to prod once approved by the model validator.
-3. Prod: deploys the model in the prod environment and monitors it, triggers retraining jobs (eg. restart pre-prod pipeline or offline modeling)
+1. **Development**: orchestrated experiments and generate source code for pipelines
+2. **Pre-prod**: receives code updates from dev stage and contain CI tests to make sure the new code/model integrates well, trains, deploys and monitors the model in the pre-prod deployment space to validate the model. The validated model can be deployed to prod once approved by the model validator.
+3. **Prod**: deploys the model in the prod environment and monitors it, triggers retraining jobs (eg. restart pre-prod pipeline or offline modeling)
 
 # 1. Getting Started
 
@@ -312,7 +312,7 @@ CRN_MLOPS = "xyz"
 BUCKET_MLOPS  = "mlops-asset"
 ```
 
-**However**, to make things easier, you may set them as Global Pipeline Parameters later on.
+**Alternatively**, to make things easier, you may set them as Global Pipeline Parameters.
 This will allow you to e.g. switch the COS Bucket you are using without having to edit mulitple notebooks. Instead, you will only have to edit the parameter. Taking advantage of this feature will prove itself useful when using multiple pipelines later on.
 
 The parameter strings should look like the example below in order for the notebooks to extract the correct values. Prepare one for your manually created Bucket and one for the Bucket attached to the project space.
