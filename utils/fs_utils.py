@@ -153,6 +153,7 @@ class FSUtils:
         X,
         y,
         train_data_ref,
+        model_type="scikit-learn_1.0"
     ):
         # sourcery skip: use-named-expression
         self.wml_client.set.default_project(self.project_id)
@@ -170,7 +171,7 @@ class FSUtils:
 
         meta_props = {
             self.wml_client.repository.ModelMetaNames.NAME: model_name,
-            self.wml_client.repository.ModelMetaNames.TYPE: "scikit-learn_1.0",
+            self.wml_client.repository.ModelMetaNames.TYPE: model_type,
             self.wml_client.repository.ModelMetaNames.SOFTWARE_SPEC_UID: software_spec_uid,
             self.wml_client.repository.ModelMetaNames.LABEL_FIELD: target,
             self.wml_client._models.ConfigurationMetaNames.TRAINING_DATA_REFERENCES: train_data_ref,
@@ -185,6 +186,7 @@ class FSUtils:
                 },
             ],
         }
+
         self.facts_client.export_facts.prepare_model_meta(
             wml_client=self.wml_client, meta_props=meta_props
         )
@@ -201,6 +203,55 @@ class FSUtils:
                 model_uid, model_entry_name, model_entry_description
             )
         return model_uid
+
+    def save_custom_model(
+        self,
+        model,
+        model_name,
+        model_entry_description,
+        model_entry_name,
+        X,
+        y,
+        model_type="scikit-learn_1.0"
+    ):
+        # sourcery skip: use-named-expression
+        self.wml_client.set.default_project(self.project_id)
+        for x in self.wml_client.repository.get_model_details()["resources"]:
+            if x["metadata"]["name"] == model_name:
+                self.wml_client.repository.delete(x["metadata"]["id"])
+
+        run_id = self.facts_client.runs.get_current_run_id()
+
+        self.facts_client.export_facts.export_payload(run_id)
+
+        software_spec_uid = self.wml_client.software_specifications.get_id_by_name(
+            "runtime-22.1-py3.9"
+        )
+
+        meta_props = {
+            self.wml_client.repository.ModelMetaNames.NAME: model_name,
+            self.wml_client.repository.ModelMetaNames.TYPE: model_type,
+            self.wml_client.repository.ModelMetaNames.SOFTWARE_SPEC_UID: software_spec_uid,
+        }
+        
+        self.facts_client.export_facts.prepare_model_meta(
+            wml_client=self.wml_client, meta_props=meta_props
+        )
+
+        model_details = self.wml_client.repository.store_model(
+            model=model, meta_props=meta_props#, training_data=X, training_target=y
+        )
+        model_uid = self.wml_client.repository.get_model_id(model_details)
+        model_entry_asset_id = self.get_model_entry_asset_id_by_name(model_entry_name)
+        if model_entry_asset_id:
+            self.register_existing_model_entry(model_uid, model_entry_asset_id)
+        else:
+            self.register_new_model_entry(
+                model_uid, model_entry_name, model_entry_description
+            )
+        return model_uid
+
+
 
     def promote_model(self, model_uid, model_name):
         """
