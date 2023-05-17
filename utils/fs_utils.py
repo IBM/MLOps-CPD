@@ -225,7 +225,7 @@ class FSUtils:
         self.facts_client.export_facts.export_payload(run_id)
 
         software_spec_uid = self.wml_client.software_specifications.get_id_by_name(
-            "runtime-22.1-py3.9"
+            "runtime-22.2-py3.10"
         )
 
         meta_props = {
