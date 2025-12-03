@@ -1,4 +1,4 @@
-# MLOps in Cloud Pak for Data
+# MLOps in Cloud Pak for Data or IBM watsonx
 
 **Welcome** 👋 to our MLOps repository!
 
